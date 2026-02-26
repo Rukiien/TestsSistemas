@@ -1,1319 +1,898 @@
-// questions.js - Banco de preguntas para los 3 tests
+// questions.js — Preguntas reales de examen extraídas de TEST_1.docx
 
 const TESTS_DATA = {
+
+  // ══════════════════════════════════════════════════════════
+  //  TEST 1 – BASE DE CONOCIMIENTO (Redes + Seguridad + SOR)
+  // ══════════════════════════════════════════════════════════
   test1: {
-    title: "Test 1 - SOR Redes y Seguridad",
-    subtitle: "Sistemas Operativos en Red",
+    title: "Test 1 — Base de Conocimiento",
+    subtitle: "Redes + Seguridad + Sistemas Operativos en Red",
     questions: [
+      // ── PARTE A – REDES (UD04) ──
       {
-        id: 1, tema: "Sistemas de Archivos",
-        enunciado: "¿Qué sistema de archivos utiliza por defecto Windows Server 2022 para gestionar el almacenamiento?",
-        opciones: { A: "NTFS", B: "ext4", C: "APFS", D: "HFS+" },
-        correcta: "A",
-        explicacion: "Windows Server 2022 usa NTFS (New Technology File System) por defecto. Es el sistema de archivos estándar de Windows que soporta permisos, cifrado EFS, cuotas y journaling."
+        id: 1, tema: "Redes – Modelo OSI",
+        enunciado: "En el modelo OSI, la capa responsable del control de congestión y enrutamiento es:",
+        opciones: { A: "Transporte", B: "Enlace", C: "Red", D: "Sesión" },
+        correcta: "C",
+        explicacion: "La capa 3 (Red) gestiona el enrutamiento de paquetes entre redes distintas y el control de congestión. Los routers operan en esta capa usando protocolos como IP, OSPF o BGP."
       },
       {
-        id: 2, tema: "Sistemas de Archivos",
-        enunciado: "¿Qué sistema de archivos (introducido en Windows Server 2012) está orientado a mayor integridad y disponibilidad de datos?",
-        opciones: { A: "ReFS", B: "FAT32", C: "exFAT", D: "UFS" },
-        correcta: "A",
-        explicacion: "ReFS (Resilient File System) fue introducido en Windows Server 2012 con foco en integridad de datos, detección de corrupción y alta disponibilidad, especialmente para grandes volúmenes."
+        id: 2, tema: "Redes – TCP/IP vs OSI",
+        enunciado: "¿Cuál fue la principal razón por la que TCP/IP ganó frente a OSI?",
+        opciones: { A: "Era más teórico", B: "Era más complejo", C: "Era práctico y ya estaba implementado", D: "Era más seguro" },
+        correcta: "C",
+        explicacion: "TCP/IP triunfó sobre OSI porque ya estaba implementado y funcionando en redes reales (ARPANET). OSI era un modelo teórico muy bien definido pero llegó tarde al mercado."
       },
       {
-        id: 3, tema: "Administración de Discos",
-        enunciado: "Tras convertir un disco básico a dinámico en Windows Server, ¿qué afirmación es correcta?",
-        opciones: {
-          A: "No se puede instalar un sistema operativo en un volumen de disco dinámico",
-          B: "Se desactiva el cifrado BitLocker automáticamente",
-          C: "El disco dinámico solo admite particiones FAT32",
-          D: "El disco deja de poder usarse para datos"
-        },
-        correcta: "A",
-        explicacion: "Los discos dinámicos no permiten instalar un SO en sus volúmenes. Se usan para datos y permiten crear volúmenes especiales como RAID, pero el arranque requiere particiones en disco básico."
+        id: 3, tema: "Redes – Estándares IEEE",
+        enunciado: "IEEE 802.3 define:",
+        opciones: { A: "Wi-Fi", B: "Ethernet", C: "Bluetooth", D: "WiMAX" },
+        correcta: "B",
+        explicacion: "IEEE 802.3 es el estándar que define Ethernet. IEEE 802.11 es Wi-Fi, IEEE 802.15 es Bluetooth/WPAN y IEEE 802.16 es WiMAX."
       },
       {
-        id: 4, tema: "Administración de Discos",
-        enunciado: "En Administración de discos de Windows Server, ¿qué tipo de volumen corresponde a RAID 1?",
-        opciones: {
-          A: "Volumen reflejado (espejo)",
-          B: "Volumen seccionado (striped)",
-          C: "Volumen distribuido (spanned)",
-          D: "Volumen simple"
-        },
-        correcta: "A",
-        explicacion: "RAID 1 es el volumen reflejado (espejo): los datos se duplican en dos discos simultáneamente, ofreciendo redundancia. Si uno falla, el otro contiene una copia exacta."
+        id: 4, tema: "Redes – Modelo OSI",
+        enunciado: "La dirección MAC opera en la capa:",
+        opciones: { A: "Aplicación", B: "Transporte", C: "Enlace de datos", D: "Red" },
+        correcta: "C",
+        explicacion: "Las direcciones MAC (Media Access Control) son direcciones físicas que operan en la capa 2 (Enlace de datos). Los switches trabajan con MACs para reenviar tramas dentro de una misma red."
       },
       {
-        id: 5, tema: "Administración Remota",
-        enunciado: "Para administrar un servidor remotamente desde otro equipo, ¿qué opción se activa según el material?",
-        opciones: {
-          A: "Escritorio remoto (Remote Desktop)",
-          B: "Compartir impresoras",
-          C: "Servidor DHCP",
-          D: "Modo seguro"
-        },
-        correcta: "A",
-        explicacion: "El Escritorio Remoto (RDP, puerto 3389) permite conectarse gráficamente a un servidor desde otro equipo. Es la herramienta principal de administración remota en entornos Windows Server."
+        id: 5, tema: "Redes – IPv4",
+        enunciado: "En IPv4, el datagrama incluye:",
+        opciones: { A: "Solo dirección MAC", B: "Cabecera y datos", C: "Solo payload", D: "Certificados digitales" },
+        correcta: "B",
+        explicacion: "Un datagrama IPv4 se compone de cabecera (con direcciones IP, TTL, protocolo, etc.) y datos (payload con el contenido de las capas superiores)."
       },
       {
-        id: 6, tema: "Administración Remota",
-        enunciado: "Para poder hacer ping al servidor (ICMP) como comprobación, ¿qué regla de entrada se suele habilitar?",
-        opciones: {
-          A: "Petición eco ICMPv4 (entrada)",
-          B: "TCP 3389 (salida)",
-          C: "UDP 53 (entrada)",
-          D: "ARP (entrada)"
-        },
-        correcta: "A",
-        explicacion: "Para que el servidor responda a ping, hay que habilitar en el Firewall de Windows la regla de entrada 'Petición eco ICMPv4'. Por defecto está bloqueada en servidores Windows."
+        id: 6, tema: "Redes – Codificación",
+        enunciado: "La codificación Manchester se caracteriza por:",
+        opciones: { A: "Ausencia de transición", B: "Transición en cada bit", C: "Solo valores positivos", D: "Paridad integrada" },
+        correcta: "B",
+        explicacion: "Manchester garantiza una transición en el centro de cada intervalo de bit: alto→bajo para el 0 y bajo→alto para el 1 (o viceversa). Esto facilita la sincronización de reloj."
       },
       {
-        id: 7, tema: "Active Directory",
-        enunciado: "En Active Directory, ¿cómo se llama el archivo principal de la base de datos del directorio?",
-        opciones: { A: "ntds.dit", B: "boot.ini", C: "sysvol.db", D: "hosts" },
-        correcta: "A",
-        explicacion: "ntds.dit (NT Directory Services Directory Information Tree) es la base de datos principal de Active Directory. Contiene todos los objetos del dominio: usuarios, grupos, equipos, etc."
+        id: 7, tema: "Redes – Codificación",
+        enunciado: "NRZ-I representa el bit 1 mediante:",
+        opciones: { A: "Nivel bajo constante", B: "Transición de señal", C: "Ausencia de señal", D: "Frecuencia alta" },
+        correcta: "B",
+        explicacion: "NRZ-I (Non-Return to Zero Inverted): el bit 1 se representa con una transición (cambio de nivel) respecto al estado anterior. El bit 0 no produce ninguna transición."
       },
       {
-        id: 8, tema: "Active Directory",
-        enunciado: "¿Qué carpeta compartida aparece replicada en cualquier controlador de dominio y suele contener GPO y scripts?",
-        opciones: { A: "SYSVOL", B: "ProgramData", C: "System32", D: "Temp" },
-        correcta: "A",
-        explicacion: "SYSVOL es una carpeta compartida replicada en todos los DC del dominio. Contiene políticas de grupo (GPO), scripts de inicio de sesión y otros archivos que deben estar disponibles en todo el dominio."
+        id: 8, tema: "Redes – Tipos de Red",
+        enunciado: "Una red clasificada como WAN se caracteriza por:",
+        opciones: { A: "Alcance local", B: "Conexión personal", C: "Gran escala geográfica", D: "Red dentro de campus" },
+        correcta: "C",
+        explicacion: "WAN (Wide Area Network) es una red de gran escala geográfica que puede conectar ciudades, países o continentes. Internet es el ejemplo más grande de WAN."
       },
       {
-        id: 9, tema: "Active Directory",
-        enunciado: "En un DN de LDAP/Active Directory, ¿qué significa el atributo DC?",
-        opciones: {
-          A: "Domain Component",
-          B: "Device Certificate",
-          C: "Directory Container",
-          D: "Domain Controller"
-        },
-        correcta: "A",
-        explicacion: "DC en un Distinguished Name LDAP significa Domain Component (componente de dominio). Por ejemplo, DC=empresa,DC=com representa el dominio empresa.com en formato LDAP."
+        id: 9, tema: "Redes – Estándares IEEE",
+        enunciado: "IEEE 802.11 corresponde a:",
+        opciones: { A: "Ethernet", B: "Wi-Fi", C: "Token Ring", D: "ARPANET" },
+        correcta: "B",
+        explicacion: "IEEE 802.11 es el estándar que define las redes inalámbricas Wi-Fi. Sus variantes (802.11a/b/g/n/ac/ax) definen distintas velocidades y frecuencias de operación."
       },
       {
-        id: 10, tema: "Administración Remota",
-        enunciado: "¿Qué herramienta permite administrar roles y características de Windows Server desde un PC Windows 10?",
-        opciones: {
-          A: "RSAT (Remote Server Administration Tools)",
-          B: "WEP",
-          C: "SNMP Trap",
-          D: "CHKDSK"
-        },
-        correcta: "A",
-        explicacion: "RSAT (Remote Server Administration Tools) es un conjunto de herramientas de Microsoft que permite administrar Windows Server remotamente desde equipos cliente Windows 10/11."
+        id: 10, tema: "Redes – Modelo OSI",
+        enunciado: "En el modelo OSI, la compresión y cifrado pertenecen a la capa:",
+        opciones: { A: "Aplicación", B: "Presentación", C: "Transporte", D: "Física" },
+        correcta: "B",
+        explicacion: "La capa 6 (Presentación) se encarga del cifrado/descifrado, compresión y conversión de formatos de datos, actuando como traductor entre la aplicación y la red."
+      },
+      // ── PARTE B – SEGURIDAD (UD05) ──
+      {
+        id: 11, tema: "Seguridad – Ataques",
+        enunciado: "Un ataque que intercepta comunicación entre dos partes es:",
+        opciones: { A: "XSS", B: "MITM", C: "DDoS", D: "Rootkit" },
+        correcta: "B",
+        explicacion: "MITM (Man-in-the-Middle) es un ataque donde el atacante se interpone entre dos partes que se comunican, pudiendo interceptar, leer o modificar el tráfico sin que las víctimas lo sepan."
       },
       {
-        id: 11, tema: "Active Directory",
-        enunciado: "En Active Directory, ¿qué tipo de grupo es el que se usa para asignar permisos y utilizar en ACL?",
-        opciones: { A: "Seguridad", B: "Distribución", C: "Invitados", D: "Difusión" },
-        correcta: "A",
-        explicacion: "Los grupos de Seguridad en AD se usan para asignar permisos a recursos y en listas de control de acceso (ACL). Los grupos de Distribución solo se usan para correo electrónico."
+        id: 12, tema: "Seguridad – Ingeniería Social",
+        enunciado: "El phishing se basa principalmente en:",
+        opciones: { A: "Fuerza bruta", B: "Ingeniería social", C: "Exploit kernel", D: "Cifrado débil" },
+        correcta: "B",
+        explicacion: "El phishing es una técnica de ingeniería social que engaña a las víctimas haciéndose pasar por entidades legítimas para robar credenciales u otra información sensible."
       },
       {
-        id: 12, tema: "Active Directory",
-        enunciado: "En Active Directory, según el material, ¿qué ámbito de grupo se suele usar por defecto?",
-        opciones: {
-          A: "Global",
-          B: "Local del equipo",
-          C: "Local de dominio (siempre)",
-          D: "Universal (siempre)"
-        },
-        correcta: "A",
-        explicacion: "El ámbito Global es el más común. Los grupos globales pueden contener usuarios del mismo dominio y se usan para organizar usuarios con características similares."
+        id: 13, tema: "Seguridad – Ataques",
+        enunciado: "Un ataque 0-Day explota:",
+        opciones: { A: "Vulnerabilidades ya parcheadas", B: "Fallos no conocidos o no parcheados", C: "Errores físicos", D: "DNS mal configurado" },
+        correcta: "B",
+        explicacion: "Un ataque Zero-Day explota vulnerabilidades que aún no son conocidas públicamente o no tienen parche disponible. Son especialmente peligrosos porque no hay defensa preparada."
       },
       {
-        id: 13, tema: "Sistemas Operativos",
-        enunciado: "¿Qué componente del sistema operativo controla el hardware y coordina la ejecución de procesos?",
-        opciones: { A: "Kernel", B: "BIOS", C: "Bootloader", D: "Firmware UEFI" },
-        correcta: "A",
-        explicacion: "El Kernel es el núcleo del SO que gestiona directamente el hardware, la memoria, los procesos y las llamadas al sistema. Es la capa más privilegiada del software."
+        id: 14, tema: "Seguridad – Principios CIA",
+        enunciado: "La confidencialidad garantiza:",
+        opciones: { A: "Acceso libre", B: "No alteración", C: "No acceso no autorizado", D: "No pérdida eléctrica" },
+        correcta: "C",
+        explicacion: "La confidencialidad (uno de los pilares de la triada CIA) garantiza que la información solo sea accesible a personas autorizadas. Se implementa mediante cifrado y control de acceso."
       },
       {
-        id: 14, tema: "Seguridad Web",
-        enunciado: "En seguridad web, ¿qué ataque consiste en inyectar código que se ejecuta en el navegador de la víctima?",
-        opciones: {
-          A: "Cross-Site Scripting (XSS)",
-          B: "SQL Injection",
-          C: "DDoS",
-          D: "Spoofing"
-        },
-        correcta: "A",
-        explicacion: "XSS (Cross-Site Scripting) inyecta scripts maliciosos en páginas web que se ejecutan en el navegador de otros usuarios, pudiendo robar cookies, sesiones o redirigir usuarios."
+        id: 15, tema: "Seguridad – Herramientas",
+        enunciado: "Un SIEM se utiliza para:",
+        opciones: { A: "Cifrar discos", B: "Monitorizar y correlacionar eventos", C: "Crear usuarios", D: "Hacer RAID" },
+        correcta: "B",
+        explicacion: "SIEM (Security Information and Event Management) recopila logs de múltiples fuentes, los correlaciona y genera alertas para detectar amenazas y responder a incidentes de seguridad."
       },
       {
-        id: 15, tema: "Auditoría de Seguridad",
-        enunciado: "¿Cuál describe mejor una auditoría externa de seguridad?",
-        opciones: {
-          A: "La realiza una entidad independiente para evaluar seguridad/cumplimiento",
-          B: "La realiza únicamente el administrador del sistema",
-          C: "Se centra solo en copias de seguridad",
-          D: "Solo revisa el hardware"
-        },
-        correcta: "A",
-        explicacion: "Una auditoría externa la realiza una entidad independiente (terceros) para evaluar la seguridad de manera objetiva e imparcial, revisando controles, cumplimiento normativo y posibles vulnerabilidades."
+        id: 16, tema: "Seguridad – Ataques",
+        enunciado: "Un ataque DDoS busca:",
+        opciones: { A: "Robar contraseñas", B: "Saturar recursos", C: "Modificar DNS", D: "Cifrar archivos" },
+        correcta: "B",
+        explicacion: "DDoS (Distributed Denial of Service) usa múltiples equipos para enviar tráfico masivo y saturar los recursos de un servidor o red, haciéndolo inaccesible para usuarios legítimos."
       },
       {
-        id: 16, tema: "Herramientas de Seguridad",
-        enunciado: "¿Qué herramienta se menciona como scanner de vulnerabilidades para pruebas de vulnerabilidad?",
-        opciones: { A: "Nessus", B: "Wireshark", C: "GIMP", D: "Notepad++" },
-        correcta: "A",
-        explicacion: "Nessus es uno de los scanners de vulnerabilidades más conocidos. Analiza sistemas en busca de vulnerabilidades conocidas, configuraciones incorrectas y posibles brechas de seguridad."
+        id: 17, tema: "Seguridad – Malware",
+        enunciado: "Un rootkit tiene como objetivo:",
+        opciones: { A: "Instalar antivirus", B: "Ocultar presencia maliciosa", C: "Configurar firewall", D: "Mejorar rendimiento" },
+        correcta: "B",
+        explicacion: "Un rootkit se infiltra en el núcleo del sistema operativo para ocultar la presencia de malware. Manipula llamadas al sistema para que el software de seguridad no detecte la amenaza."
       },
       {
-        id: 17, tema: "SIEM",
-        enunciado: "¿Qué es un SIEM?",
-        opciones: {
-          A: "Sistema que recopila/correlaciona eventos y logs para detectar amenazas",
-          B: "Protocolo de cifrado para Wi-Fi",
-          C: "Tipo de malware que cifra archivos",
-          D: "Sistema de archivos de Linux"
-        },
-        correcta: "A",
-        explicacion: "SIEM (Security Information and Event Management) es una plataforma que centraliza la recopilación de logs, correlaciona eventos y genera alertas para detectar amenazas y responder a incidentes."
+        id: 18, tema: "Seguridad – Forense",
+        enunciado: "El análisis forense incluye:",
+        opciones: { A: "Eliminación de logs", B: "Preservación de evidencia", C: "Instalación de malware", D: "Cambio de BIOS" },
+        correcta: "B",
+        explicacion: "El análisis forense digital tiene como principio fundamental la preservación de la evidencia en su estado original, asegurando la cadena de custodia para posibles procesos legales."
       },
       {
-        id: 18, tema: "SIEM",
-        enunciado: "¿Cuál de las siguientes es una herramienta SIEM mencionada en el temario?",
-        opciones: { A: "Splunk", B: "PuTTY", C: "WinRAR", D: "VLC" },
-        correcta: "A",
-        explicacion: "Splunk es una plataforma SIEM ampliamente usada para recopilar, indexar y analizar datos de máquinas y logs en tiempo real para seguridad y operaciones de TI."
+        id: 19, tema: "Seguridad – Control de Acceso",
+        enunciado: "RBAC significa:",
+        opciones: { A: "Root Based Access Control", B: "Role-Based Access Control", C: "Remote Backup Active Control", D: "Random Binary Access Check" },
+        correcta: "B",
+        explicacion: "RBAC (Role-Based Access Control) es un modelo de control de acceso que asigna permisos a roles (administrador, usuario, auditor) en lugar de a usuarios individuales, simplificando la gestión."
       },
       {
-        id: 19, tema: "Modelo OSI",
-        enunciado: "Según el modelo OSI, ¿cuántas capas existen?",
-        opciones: { A: "7", B: "4", C: "5", D: "9" },
+        id: 20, tema: "Seguridad – Principios CIA",
+        enunciado: "La integridad se pierde cuando:",
+        opciones: { A: "Se modifica información", B: "Se cifra correctamente", C: "Se autentica con MFA", D: "Se usa VPN" },
         correcta: "A",
-        explicacion: "El modelo OSI (Open Systems Interconnection) tiene 7 capas: Física, Enlace, Red, Transporte, Sesión, Presentación y Aplicación. Es el marco de referencia para las comunicaciones en red."
+        explicacion: "La integridad garantiza que la información no haya sido alterada de forma no autorizada. Se pierde cuando alguien modifica los datos sin permiso. Se protege con hashes y firmas digitales."
+      },
+      // ── PARTE C – SISTEMAS OPERATIVOS EN RED (UD06) ──
+      {
+        id: 21, tema: "SOR – Active Directory",
+        enunciado: "Un Controlador de Dominio almacena:",
+        opciones: { A: "Solo DNS", B: "Copia de la base AD", C: "Solo DHCP", D: "Solo usuarios locales" },
+        correcta: "B",
+        explicacion: "El DC almacena y mantiene una copia de la base de datos de Active Directory (ntds.dit), que contiene todos los objetos del dominio: usuarios, grupos, equipos y políticas."
       },
       {
-        id: 20, tema: "Protocolos de Red",
-        enunciado: "¿Qué pila/protocolo es la base práctica usada en Internet?",
-        opciones: { A: "TCP/IP", B: "OSI", C: "NetBIOS", D: "IPX/SPX" },
-        correcta: "A",
-        explicacion: "TCP/IP (Transmission Control Protocol/Internet Protocol) es la suite de protocolos sobre la que se basa Internet. A diferencia de OSI (que es un modelo teórico), TCP/IP es la implementación real."
+        id: 22, tema: "SOR – Instalación AD",
+        enunciado: "Para promover un servidor a DC es necesario instalar:",
+        opciones: { A: "IIS", B: "AD DS", C: "FTP", D: "RAID" },
+        correcta: "B",
+        explicacion: "El rol AD DS (Active Directory Domain Services) es el que hay que instalar antes de promover el servidor a DC. Se añade desde Server Manager y luego se ejecuta el asistente de promoción."
       },
       {
-        id: 21, tema: "Virtualización",
-        enunciado: "En Windows 10 Pro/Education/Enterprise, ¿qué cmdlet habilita Hyper-V según el material?",
-        opciones: {
-          A: "Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All",
-          B: "Install-Package HyperV",
-          C: "Start-Service hyperv",
-          D: "Enable-HyperV -Force"
-        },
-        correcta: "A",
-        explicacion: "Para habilitar Hyper-V en Windows 10 se usa el cmdlet Enable-WindowsOptionalFeature con los parámetros -Online -FeatureName Microsoft-Hyper-V -All desde PowerShell con privilegios de administrador."
+        id: 23, tema: "SOR – Estructura AD",
+        enunciado: "Un bosque puede contener:",
+        opciones: { A: "Un solo dominio", B: "Varios dominios", C: "Solo RODC", D: "Solo OU" },
+        correcta: "B",
+        explicacion: "Un bosque de AD puede contener varios dominios organizados en árboles. El mínimo es el dominio raíz pero puede crecer añadiendo dominios hijos y árboles adicionales."
       },
       {
-        id: 22, tema: "Codificación de Señales",
-        enunciado: "¿En cuál de las siguientes tecnologías es típico el uso de la codificación Manchester?",
-        opciones: {
-          A: "Ethernet (IEEE 802.3)",
-          B: "Wi-Fi (IEEE 802.11)",
-          C: "USB",
-          D: "Bluetooth"
-        },
-        correcta: "A",
-        explicacion: "La codificación Manchester se usa en Ethernet (IEEE 802.3) de 10 Mbps. Cada bit tiene una transición en el centro: 1 = bajo→alto, 0 = alto→bajo. Facilita la sincronización de reloj."
+        id: 24, tema: "SOR – Unidades Organizativas",
+        enunciado: "Una OU permite:",
+        opciones: { A: "Crear bosques", B: "Agrupar objetos y aplicar GPO", C: "Eliminar dominio", D: "Sustituir DC" },
+        correcta: "B",
+        explicacion: "Las OUs son contenedores jerárquicos que agrupan objetos AD (usuarios, equipos, grupos) y permiten aplicar GPO específicas y delegar la administración."
       },
       {
-        id: 23, tema: "Protocolos de Red",
-        enunciado: "En ARP, ¿a qué dirección MAC se envía normalmente una petición ARP (ARP Request)?",
-        opciones: {
-          A: "FF:FF:FF:FF:FF:FF",
-          B: "00:00:00:00:00:00",
-          C: "01:00:5E:00:00:FB",
-          D: "AA:BB:CC:DD:EE:FF"
-        },
-        correcta: "A",
-        explicacion: "Las peticiones ARP se envían a la dirección MAC de broadcast FF:FF:FF:FF:FF:FF para preguntar a todos los equipos de la red local qué MAC corresponde a una IP determinada."
+        id: 25, tema: "SOR – RSAT",
+        enunciado: "RSAT permite:",
+        opciones: { A: "Instalar imágenes PXE", B: "Administrar roles desde cliente Windows", C: "Configurar BIOS", D: "Hacer RAID" },
+        correcta: "B",
+        explicacion: "RSAT (Remote Server Administration Tools) es un conjunto de herramientas de Microsoft que permite administrar roles y características de Windows Server desde un equipo cliente Windows 10/11."
       },
       {
-        id: 24, tema: "Seguridad",
-        enunciado: "¿Qué protocolo proporciona un canal seguro sobre una red insegura usando criptografía asimétrica?",
-        opciones: { A: "SSH", B: "HTTP", C: "FTP", D: "Telnet" },
+        id: 26, tema: "SOR – WDS",
+        enunciado: "WDS permite:",
+        opciones: { A: "Instalación remota por PXE", B: "Configurar RAID", C: "Crear OU", D: "Instalar antivirus" },
         correcta: "A",
-        explicacion: "SSH (Secure Shell) usa criptografía asimétrica para autenticar y establecer un canal cifrado seguro. Reemplaza a Telnet y FTP para administración remota segura."
+        explicacion: "WDS (Windows Deployment Services) permite desplegar imágenes del sistema operativo en equipos cliente de forma remota a través de arranque PXE, sin necesidad de medios físicos."
       },
       {
-        id: 25, tema: "Seguridad - Principios",
-        enunciado: "En el temario de seguridad, la confidencialidad se refiere a que la información…",
-        opciones: {
-          A: "no es accesible/entendible por personas no autorizadas",
-          B: "no puede modificarse",
-          C: "siempre está disponible",
-          D: "no puede ser copiada nunca"
-        },
+        id: 27, tema: "SOR – Unión al Dominio",
+        enunciado: "Para unir un PC al dominio se requiere:",
+        opciones: { A: "DNS funcional", B: "Bluetooth", C: "USB booteable", D: "Solo IP pública" },
         correcta: "A",
-        explicacion: "La confidencialidad es uno de los pilares de la triada CIA de seguridad. Garantiza que la información solo sea accesible para personas autorizadas. Se logra mediante cifrado, control de acceso, etc."
+        explicacion: "Para unir un equipo al dominio es imprescindible que el DNS esté correctamente configurado en el cliente, ya que necesita resolver el nombre del dominio para localizar el DC."
       },
       {
-        id: 26, tema: "Seguridad - Principios",
-        enunciado: "¿Qué propiedad de seguridad busca impedir que alguien niegue la autoría o envío de un mensaje?",
-        opciones: { A: "No repudio", B: "Disponibilidad", C: "Compresión", D: "Trazabilidad" },
-        correcta: "A",
-        explicacion: "El No repudio (non-repudiation) garantiza que un actor no pueda negar haber realizado una acción, como enviar un mensaje. Se logra con firmas digitales y registros de auditoría."
+        id: 28, tema: "SOR – RAID",
+        enunciado: "RAID5 utiliza:",
+        opciones: { A: "Espejo", B: "Paridad distribuida", C: "Solo copia simple", D: "Cifrado AES" },
+        correcta: "B",
+        explicacion: "RAID5 distribuye tanto los datos como la información de paridad entre todos los discos del conjunto (mínimo 3). La paridad permite reconstruir datos si falla un disco."
       },
       {
-        id: 27, tema: "Tipos de Ataques",
-        enunciado: "¿Qué significa DDoS?",
-        opciones: {
-          A: "Denegación de servicio distribuida",
-          B: "Detección de dispositivos en red",
-          C: "Descarga de datos desde origen",
-          D: "Desencriptado de discos"
-        },
-        correcta: "A",
-        explicacion: "DDoS (Distributed Denial of Service) es un ataque que usa múltiples equipos (botnet) para inundar un servicio con peticiones, saturarlo y hacerlo inaccesible para usuarios legítimos."
+        id: 29, tema: "SOR – PowerShell",
+        enunciado: "En PowerShell, los cmdlets suelen comenzar por:",
+        opciones: { A: "Exec-", B: "Get-/Set-/New-", C: "Run-", D: "Addonly-" },
+        correcta: "B",
+        explicacion: "Los cmdlets de PowerShell siguen la convención Verbo-Sustantivo. Los verbos más comunes son Get- (obtener información), Set- (modificar), New- (crear) y Remove- (eliminar)."
       },
       {
-        id: 28, tema: "Tipos de Ataques",
-        enunciado: "¿En qué consiste el ransomware?",
-        opciones: {
-          A: "Secuestra/cifra información o cuentas y exige un rescate",
-          B: "Duplica la velocidad de la red",
-          C: "Actualiza el sistema operativo",
-          D: "Bloquea anuncios en el navegador"
-        },
-        correcta: "A",
-        explicacion: "El ransomware cifra los archivos de la víctima y exige un pago (rescate) para proporcionar la clave de descifrado. Es uno de los ataques más dañinos económicamente en la actualidad."
+        id: 30, tema: "SOR – PowerShell",
+        enunciado: "New-ADGroup crea:",
+        opciones: { A: "OU", B: "Usuario", C: "Grupo", D: "Dominio" },
+        correcta: "C",
+        explicacion: "New-ADGroup es el cmdlet de PowerShell que crea grupos en Active Directory. Requiere parámetros como -Name, -Path, -GroupCategory y -GroupScope."
       },
       {
-        id: 29, tema: "Ingeniería Social",
-        enunciado: "¿Qué es el phishing?",
-        opciones: {
-          A: "Estafa para obtener credenciales usando webs/correos falsos",
-          B: "Ataque físico a un CPD",
-          C: "Virus que solo afecta a móviles",
-          D: "Algoritmo de cifrado"
-        },
-        correcta: "A",
-        explicacion: "El phishing usa correos, mensajes o sitios web falsos que imitan entidades legítimas para engañar a usuarios y robar credenciales, datos bancarios u otra información sensible."
+        id: 31, tema: "SOR – PowerShell",
+        enunciado: "Enable-PSRemoting permite:",
+        opciones: { A: "Habilitar DHCP", B: "Permitir administración remota PowerShell", C: "Instalar RSAT", D: "Configurar RAID" },
+        correcta: "B",
+        explicacion: "Enable-PSRemoting configura WinRM en el servidor para aceptar comandos PowerShell remotos, habilitando cmdlets como Invoke-Command y Enter-PSSession desde otros equipos."
       },
       {
-        id: 30, tema: "Ingeniería Social",
-        enunciado: "¿Qué técnica de ingeniería social consiste en dejar un USB 'atractivo' para que la víctima lo conecte?",
-        opciones: { A: "Baiting", B: "Hardening", C: "Whitelisting", D: "Hashing" },
-        correcta: "A",
-        explicacion: "Baiting (cebo) consiste en dejar dispositivos como USB infectados en lugares donde la víctima los encuentre y conecte, ejecutando automáticamente malware al insertarlo."
+        id: 32, tema: "SOR – RODC",
+        enunciado: "Un RODC es:",
+        opciones: { A: "Editable", B: "Solo lectura", C: "DNS secundario", D: "Servidor DHCP" },
+        correcta: "B",
+        explicacion: "RODC (Read-Only Domain Controller) almacena una copia de solo lectura de la base AD. Ideal para sedes remotas donde no se puede garantizar la seguridad física del servidor."
       },
       {
-        id: 31, tema: "Ingeniería Social",
-        enunciado: "Un deepfake vishing es…",
-        opciones: {
-          A: "una suplantación (por voz) usando IA para engañar en llamadas",
-          B: "un ataque DDoS desde bots",
-          C: "un firewall mal configurado",
-          D: "una copia segura de archivos"
-        },
-        correcta: "A",
-        explicacion: "Deepfake vishing combina deepfake (síntesis de voz/audio con IA) y vishing (phishing por voz). Se usan voces falsificadas con IA para suplantar personas de confianza en llamadas telefónicas."
+        id: 33, tema: "SOR – Nivel Funcional",
+        enunciado: "El nivel funcional del dominio define:",
+        opciones: { A: "Tamaño del disco", B: "Características habilitadas", C: "Número de usuarios", D: "Tipo de RAID" },
+        correcta: "B",
+        explicacion: "El nivel funcional del dominio determina qué características de AD están disponibles según la versión mínima de Windows Server de todos los DCs del dominio."
       },
       {
-        id: 32, tema: "Codificación de Señales",
-        enunciado: "En NRZ-I, ¿cómo se representa un bit 1?",
-        opciones: {
-          A: "Con un cambio de nivel (transición)",
-          B: "Sin cambios de nivel",
-          C: "Con retorno a cero a mitad de bit",
-          D: "Con dos transiciones por bit"
-        },
-        correcta: "A",
-        explicacion: "NRZ-I (Non-Return to Zero Inverted): el bit 1 provoca una transición (cambio de nivel) y el bit 0 no provoca cambio. Es diferencial, lo que ayuda a detectar inversiones de polaridad."
+        id: 34, tema: "SOR – Sistema de Archivos",
+        enunciado: "ReFS es:",
+        opciones: { A: "Protocolo red", B: "Sistema de archivos", C: "Servicio dominio", D: "Herramienta RSAT" },
+        correcta: "B",
+        explicacion: "ReFS (Resilient File System) es el sistema de archivos de Microsoft orientado a mayor integridad y resiliencia. Es una alternativa a NTFS en Windows Server para grandes volúmenes."
       },
       {
-        id: 33, tema: "Codificación de Señales",
-        enunciado: "¿Por qué la codificación RZ suele requerir más ancho de banda que NRZ?",
-        opciones: {
-          A: "Porque introduce transiciones adicionales al volver a cero",
-          B: "Porque elimina todas las transiciones",
-          C: "Porque usa menos niveles de voltaje",
-          D: "Porque solo funciona con fibra óptica"
-        },
-        correcta: "A",
-        explicacion: "RZ (Return to Zero) vuelve a nivel cero a mitad de cada bit. Esto introduce una transición extra por bit respecto a NRZ, requiriendo aproximadamente el doble de ancho de banda."
+        id: 35, tema: "SOR – LDAP",
+        enunciado: "En LDAP, CN significa:",
+        opciones: { A: "Control Node", B: "Common Name", C: "Central Network", D: "Core Name" },
+        correcta: "B",
+        explicacion: "CN (Common Name) es el atributo LDAP que identifica el nombre común de un objeto. Por ejemplo, CN=Juan García es el nombre del usuario dentro de su ruta Distinguished Name completa."
       },
       {
-        id: 34, tema: "Codificación de Señales",
-        enunciado: "Según el PDF de codificaciones, en Manchester el bit 0 se representa con transición…",
-        opciones: {
-          A: "de alto a bajo",
-          B: "de bajo a alto",
-          C: "sin transición",
-          D: "solo con cambio al inicio del bit"
-        },
-        correcta: "A",
-        explicacion: "En la codificación Manchester estándar (IEEE 802.3): el bit 0 se representa con una transición de alto a bajo en el centro del bit, y el bit 1 con una transición de bajo a alto."
+        id: 36, tema: "SOR – Autenticación",
+        enunciado: "La autenticación en dominio es:",
+        opciones: { A: "Local", B: "Centralizada", C: "Manual", D: "Peer-to-peer" },
+        correcta: "B",
+        explicacion: "La autenticación en dominio es centralizada: todas las credenciales se verifican contra la base de datos de AD en el DC, independientemente del equipo donde inicie sesión el usuario."
       },
       {
-        id: 35, tema: "Codificación de Señales",
-        enunciado: "En Diferencial Manchester, el bit 0 se indica por…",
-        opciones: {
-          A: "una transición al inicio del bit",
-          B: "ausencia de transición en el centro",
-          C: "un nivel fijo todo el bit",
-          D: "una transición solo al final del bit"
-        },
-        correcta: "A",
-        explicacion: "En Manchester Diferencial: el bit 0 se indica por una transición al comienzo del intervalo de bit. El bit 1 no tiene transición al inicio. Siempre hay una transición en el centro para sincronización."
+        id: 37, tema: "SOR – Estructura AD",
+        enunciado: "Un dominio representa:",
+        opciones: { A: "Red física", B: "Límite de seguridad", C: "Router", D: "VLAN" },
+        correcta: "B",
+        explicacion: "Un dominio AD es fundamentalmente un límite de seguridad lógico: define el alcance de las políticas, permisos y la base de datos de objetos compartida por todos los DCs del dominio."
       },
       {
-        id: 36, tema: "Codificación de Señales",
-        enunciado: "En AMI, los bits 1 se codifican…",
-        opciones: {
-          A: "alternando +V y -V; los 0 van a 0V",
-          B: "siempre a +V",
-          C: "siempre a -V",
-          D: "con retorno a cero"
-        },
+        id: 38, tema: "SOR – DHCP",
+        enunciado: "DHCP en dominio debe:",
+        opciones: { A: "Estar autorizado en AD", B: "Ser local", C: "Estar desactivado", D: "Ser manual" },
         correcta: "A",
-        explicacion: "AMI (Alternate Mark Inversion): los bits 1 alternan entre +V y -V sucesivamente, mientras que los bits 0 se representan como 0V. Esto equilibra la señal y facilita detección de errores."
+        explicacion: "En entornos de dominio AD, el servidor DHCP debe estar autorizado explícitamente en Active Directory para poder conceder direcciones IP. Esto evita servidores DHCP no autorizados."
       },
       {
-        id: 37, tema: "Codificación de Señales",
-        enunciado: "En 4B/5B, ¿qué sobrecarga aproximada introduce frente a los datos originales?",
-        opciones: {
-          A: "25% más de bits",
-          B: "10% menos de bits",
-          C: "50% menos de bits",
-          D: "No introduce sobrecarga"
-        },
-        correcta: "A",
-        explicacion: "4B/5B convierte cada 4 bits en 5 bits (añade 1 bit extra por cada 4), introduciendo una sobrecarga del 25%. Garantiza suficientes transiciones para sincronización sin largas secuencias de ceros."
+        id: 39, tema: "SOR – Replicación AD",
+        enunciado: "La replicación AD garantiza:",
+        opciones: { A: "Igual IP", B: "Igual base en DCs", C: "Igual BIOS", D: "Igual RAM" },
+        correcta: "B",
+        explicacion: "La replicación multimaestro de AD garantiza que todos los DCs del dominio tengan una copia idéntica y sincronizada de la base de datos, asegurando consistencia y disponibilidad."
       },
       {
-        id: 38, tema: "Datagramas IPv4",
-        enunciado: "En un datagrama IPv4, el valor inicial 45 indica…",
-        opciones: {
-          A: "IPv4 e IHL=5 (cabecera de 20 bytes)",
-          B: "IPv6 y cabecera de 40 bytes",
-          C: "UDP y puerto 45",
-          D: "TCP y puerto 45"
-        },
+        id: 40, tema: "SOR – WDS",
+        enunciado: "La instalación remota requiere:",
+        opciones: { A: "PXE habilitado", B: "Solo USB", C: "Bluetooth", D: "Solo ISO local" },
         correcta: "A",
-        explicacion: "El byte 0x45 en la cabecera IP: el nibble alto '4' indica IPv4, y el nibble bajo '5' es el IHL (Internet Header Length) en unidades de 32 bits = 5×4 = 20 bytes de cabecera estándar."
-      },
-      {
-        id: 39, tema: "Datagramas IPv4",
-        enunciado: "En el ejemplo de datagrama, TTL = 0x80 equivale a…",
-        opciones: { A: "128", B: "64", C: "80", D: "255" },
-        correcta: "A",
-        explicacion: "0x80 en hexadecimal = 128 en decimal. El TTL (Time To Live) limita la vida de un paquete; cada router lo decrementa en 1 y descarta el paquete cuando llega a 0, evitando bucles infinitos."
-      },
-      {
-        id: 40, tema: "TCP",
-        enunciado: "En TCP, el flag SYN suele indicar…",
-        opciones: {
-          A: "inicio del establecimiento de conexión",
-          B: "cierre inmediato de la conexión",
-          C: "paquete retransmitido",
-          D: "paquete con datos cifrados"
-        },
-        correcta: "A",
-        explicacion: "El flag SYN (Synchronize) inicia el handshake de 3 pasos de TCP. El cliente envía SYN, el servidor responde SYN-ACK, y el cliente confirma con ACK. Establece números de secuencia iniciales."
+        explicacion: "Para la instalación remota con WDS, los equipos cliente deben tener habilitado el arranque PXE (Preboot Execution Environment) en su BIOS/UEFI para recibir la imagen del SO por red."
       }
     ]
   },
 
+  // ══════════════════════════════════════════════════════════
+  //  TEST 2 – NIVEL AVANZADO (Casos prácticos)
+  // ══════════════════════════════════════════════════════════
   test2: {
-    title: "Test 2 - SOR Redes y Seguridad",
-    subtitle: "Sistemas Operativos en Red",
+    title: "Test 2 — Nivel Avanzado",
+    subtitle: "Casos prácticos · Redes + Seguridad + SOR",
     questions: [
       {
-        id: 1, tema: "Administración de Discos",
-        enunciado: "En Administración de discos de Windows Server, ¿qué tipo de volumen equivale a RAID 0?",
-        opciones: {
-          A: "Volumen seccionado (striped)",
-          B: "Volumen reflejado (espejo)",
-          C: "Volumen RAID-5",
-          D: "Volumen simple"
-        },
-        correcta: "A",
-        explicacion: "RAID 0 es el volumen seccionado (striped): los datos se distribuyen en franjas entre múltiples discos para mayor rendimiento. No ofrece redundancia; si un disco falla, se pierden todos los datos."
+        id: 1, tema: "Redes – Modelo OSI",
+        enunciado: "Un paquete viaja desde un cliente a un servidor web. ¿En qué capa OSI se realiza el enrutamiento?",
+        opciones: { A: "Enlace", B: "Red", C: "Transporte", D: "Aplicación" },
+        correcta: "B",
+        explicacion: "El enrutamiento (decidir por qué camino viaja el paquete entre redes) es función de la capa 3 (Red). Los routers analizan las direcciones IP y consultan sus tablas de enrutamiento."
       },
       {
-        id: 2, tema: "Sistemas de Archivos",
-        enunciado: "Según el material, ¿para qué tipo de uso se recomienda especialmente ReFS?",
-        opciones: {
-          A: "Almacenamiento con grandes volúmenes de datos y baja frecuencia de acceso",
-          B: "Servidores con millones de accesos concurrentes a archivos",
-          C: "Sistemas embebidos con FAT16",
-          D: "Equipos sin necesidad de integridad de datos"
-        },
-        correcta: "A",
-        explicacion: "ReFS está especialmente recomendado para almacenamiento de grandes volúmenes (archivos, backups, virtualización) donde la integridad de datos y la resiliencia son críticas pero el acceso no es masivo concurrente."
+        id: 2, tema: "Redes – Modelo OSI",
+        enunciado: "Si un switch trabaja con direcciones MAC, opera en la capa:",
+        opciones: { A: "Física", B: "Enlace", C: "Red", D: "Transporte" },
+        correcta: "B",
+        explicacion: "Los switches trabajan con direcciones MAC para reenviar tramas dentro de la misma red local, operando en la capa 2 (Enlace de datos). Los routers operan en la capa 3 (Red)."
       },
       {
-        id: 3, tema: "Active Directory",
-        enunciado: "Al instalar el rol de Active Directory Domain Services (AD DS), ¿qué servicio suele ser necesario y puede instalarse como requisito?",
-        opciones: { A: "DNS", B: "FTP", C: "SNMP", D: "NTP" },
-        correcta: "A",
-        explicacion: "AD DS requiere DNS para funcionar ya que usa DNS para localizar controladores de dominio, servicios y recursos. Al instalar AD DS, el asistente ofrece instalar DNS si no está ya presente."
+        id: 3, tema: "Redes – Tipos de Red",
+        enunciado: "Una red MAN se caracteriza por:",
+        opciones: { A: "Conectar dispositivos personales", B: "Conectar edificios dentro de una ciudad", C: "Conectar solo una casa", D: "Conectar solo un campus" },
+        correcta: "B",
+        explicacion: "MAN (Metropolitan Area Network) es una red de área metropolitana que conecta múltiples edificios u organizaciones dentro de una ciudad, mayor que una LAN pero menor que una WAN."
       },
       {
-        id: 4, tema: "Active Directory",
-        enunciado: "Después de añadir el rol AD DS en un servidor, el siguiente paso para crear un dominio es…",
-        opciones: {
-          A: "Promover el servidor a Controlador de Dominio (Domain Controller)",
-          B: "Cambiar el sistema de archivos a ext4",
-          C: "Desactivar el firewall",
-          D: "Eliminar el servicio DNS"
-        },
-        correcta: "A",
-        explicacion: "Añadir el rol AD DS solo instala los binarios. El paso siguiente es promover el servidor a DC mediante el asistente de 'Promover este servidor a controlador de dominio', que crea o une el dominio."
+        id: 4, tema: "Redes – TCP/IP vs OSI",
+        enunciado: "En el modelo TCP/IP, la capa 'Internet' equivale aproximadamente a la capa OSI:",
+        opciones: { A: "Transporte", B: "Aplicación", C: "Red", D: "Física" },
+        correcta: "C",
+        explicacion: "La capa Internet del modelo TCP/IP (que maneja IP, ICMP, ARP) equivale a la capa 3 (Red) del modelo OSI. Ambas se encargan del direccionamiento y enrutamiento entre redes."
       },
       {
-        id: 5, tema: "Active Directory",
-        enunciado: "¿Qué significa RODC en Active Directory?",
-        opciones: {
-          A: "Read-Only Domain Controller (controlador de dominio de solo lectura)",
-          B: "Remote Office Data Center",
-          C: "Routing Optimized Domain Cache",
-          D: "Role of Domain Clients"
-        },
-        correcta: "A",
-        explicacion: "RODC (Read-Only Domain Controller) es un DC que tiene una copia de solo lectura de la base de datos AD. Se usa en sucursales donde la seguridad física no está garantizada."
+        id: 5, tema: "Redes – Modelo OSI",
+        enunciado: "La función 'Keep Link Without Error' pertenece a:",
+        opciones: { A: "Capa Física", B: "Capa Enlace", C: "Capa Red", D: "Capa Transporte" },
+        correcta: "B",
+        explicacion: "La capa 2 (Enlace de datos) se encarga de la detección y corrección de errores en el enlace, garantizando una transmisión fiable en el trayecto punto a punto entre nodos directamente conectados."
       },
       {
-        id: 6, tema: "Active Directory",
-        enunciado: "¿Para qué se utiliza el Catálogo Global (Global Catalog) en un bosque de Active Directory?",
-        opciones: {
-          A: "Facilita búsquedas y contiene información de objetos del bosque",
-          B: "Sustituye al servidor DHCP",
-          C: "Cifra todo el tráfico de red",
-          D: "Reemplaza la base de datos ntds.dit"
-        },
+        id: 6, tema: "Redes – Modelo OSI",
+        enunciado: "Si un cable Ethernet está mal crimpado, el fallo afecta principalmente a:",
+        opciones: { A: "Capa Aplicación", B: "Capa Transporte", C: "Capa Física", D: "Capa Sesión" },
+        correcta: "C",
+        explicacion: "Un cable mal crimpado es un problema físico (eléctrico/mecánico) que afecta a la capa 1 (Física), responsable de la transmisión de bits a través del medio físico."
+      },
+      {
+        id: 7, tema: "Redes – Codificación",
+        enunciado: "En Manchester diferencial, la sincronización se garantiza porque:",
+        opciones: { A: "No hay transiciones", B: "Hay transición en cada periodo", C: "Usa paridad", D: "Usa compresión" },
+        correcta: "B",
+        explicacion: "Manchester Diferencial garantiza siempre una transición en el centro de cada intervalo de bit, lo que asegura sincronización continua entre transmisor y receptor."
+      },
+      {
+        id: 8, tema: "Redes – Topologías",
+        enunciado: "Una topología en estrella depende críticamente de:",
+        opciones: { A: "Cable coaxial", B: "Nodo central", C: "Token Bus", D: "Router externo" },
+        correcta: "B",
+        explicacion: "En la topología en estrella, todos los dispositivos se conectan a un nodo central (switch o hub). Si el nodo central falla, toda la red queda inoperativa."
+      },
+      {
+        id: 9, tema: "Redes – Estándares IEEE",
+        enunciado: "IEEE 802.15 está asociado a:",
+        opciones: { A: "WiMAX", B: "Ethernet", C: "Bluetooth", D: "ARP" },
+        correcta: "C",
+        explicacion: "IEEE 802.15 define las redes WPAN (Wireless Personal Area Network), cuyo principal exponente es Bluetooth. Cubre comunicaciones de corto alcance para dispositivos personales."
+      },
+      {
+        id: 10, tema: "Redes – IPv4",
+        enunciado: "Un datagrama IPv4 contiene información de:",
+        opciones: { A: "Dirección origen y destino", B: "Dirección MAC física", C: "Solo puerto", D: "Certificados TLS" },
         correcta: "A",
+        explicacion: "La cabecera IPv4 incluye la dirección IP de origen y destino (entre otros campos como TTL, protocolo, longitud, etc.). Las MACs son de capa 2 y no viajan en la cabecera IP."
+      },
+      {
+        id: 11, tema: "Seguridad – Ataques",
+        enunciado: "Una empresa sufre saturación del servidor por múltiples equipos externos. Es un caso de:",
+        opciones: { A: "MITM", B: "DDoS", C: "XSS", D: "Rootkit" },
+        correcta: "B",
+        explicacion: "DDoS (Distributed Denial of Service): múltiples equipos (botnet) lanzan peticiones masivas para saturar el servidor. La clave es que el ataque viene de muchas fuentes distribuidas simultáneamente."
+      },
+      {
+        id: 12, tema: "Seguridad – Ingeniería Social",
+        enunciado: "Un empleado recibe un correo falso del 'director' pidiendo credenciales. Es:",
+        opciones: { A: "Fuerza bruta", B: "Spear Phishing", C: "SQL Injection", D: "Botnet" },
+        correcta: "B",
+        explicacion: "Spear Phishing es un phishing dirigido a una persona u organización específica, haciéndose pasar por alguien de confianza (como el director). Es más sofisticado que el phishing genérico."
+      },
+      {
+        id: 13, tema: "Seguridad – Ataques",
+        enunciado: "Un atacante intercepta tráfico para modificar datos antes de que lleguen al servidor. Es:",
+        opciones: { A: "MITM", B: "Worm", C: "Ransomware", D: "ARP legítimo" },
+        correcta: "A",
+        explicacion: "MITM (Man-in-the-Middle): el atacante se interpone entre cliente y servidor, interceptando y potencialmente modificando el tráfico antes de reenviarlo al destino legítimo."
+      },
+      {
+        id: 14, tema: "Seguridad – Herramientas",
+        enunciado: "Un SIEM ayuda a:",
+        opciones: { A: "Instalar antivirus", B: "Correlacionar eventos y detectar anomalías", C: "Crear RAID", D: "Configurar DHCP" },
+        correcta: "B",
+        explicacion: "SIEM centraliza logs de múltiples fuentes (firewalls, IDS, servidores), los correlaciona y detecta patrones anómalos que podrían indicar un ataque, generando alertas para el equipo de seguridad."
+      },
+      {
+        id: 15, tema: "Seguridad – Autenticación",
+        enunciado: "La autenticación multifactor combina:",
+        opciones: { A: "Usuario + contraseña", B: "Algo que sabes + algo que tienes o eres", C: "Dos contraseñas", D: "DNS + DHCP" },
+        correcta: "B",
+        explicacion: "MFA (Multi-Factor Authentication) combina dos o más factores de distinta categoría: algo que sabes (contraseña/PIN), algo que tienes (token/móvil) y/o algo que eres (huella, rostro)."
+      },
+      {
+        id: 16, tema: "Seguridad – Malware",
+        enunciado: "Un keylogger tiene como objetivo:",
+        opciones: { A: "Cifrar datos", B: "Capturar pulsaciones de teclado", C: "Generar paridad RAID", D: "Configurar firewall" },
+        correcta: "B",
+        explicacion: "Un keylogger registra en segundo plano todas las pulsaciones del teclado para capturar contraseñas, números de tarjeta y otra información sensible introducida por el usuario."
+      },
+      {
+        id: 17, tema: "Seguridad – Principios CIA",
+        enunciado: "La integridad se protege mediante:",
+        opciones: { A: "Hash", B: "IP pública", C: "Topología estrella", D: "PXE" },
+        correcta: "A",
+        explicacion: "La integridad de los datos se protege mediante funciones hash (MD5, SHA-256, etc.) y firmas digitales. Si los datos se alteran, el hash resultante será diferente al original, detectando la manipulación."
+      },
+      {
+        id: 18, tema: "Seguridad – Ataques",
+        enunciado: "Un ataque Zero-Day es especialmente peligroso porque:",
+        opciones: { A: "Ya existe parche", B: "No existe solución aún", C: "Solo afecta Linux", D: "Solo afecta DNS" },
+        correcta: "B",
+        explicacion: "Un Zero-Day explota una vulnerabilidad desconocida para el fabricante o para la que no existe parche. Al no haber defensa disponible, los sistemas afectados están completamente expuestos."
+      },
+      {
+        id: 19, tema: "Seguridad – Control de Acceso",
+        enunciado: "RBAC mejora seguridad porque:",
+        opciones: { A: "Permite acceso total", B: "Asigna permisos según rol", C: "Elimina usuarios", D: "Desactiva logs" },
+        correcta: "B",
+        explicacion: "RBAC asigna permisos a roles predefinidos (administrador, usuario estándar, auditor) y los usuarios obtienen solo los permisos del rol que tienen asignado, aplicando el principio de mínimo privilegio."
+      },
+      {
+        id: 20, tema: "Seguridad – Malware",
+        enunciado: "Un rootkit es peligroso porque:",
+        opciones: { A: "Mejora rendimiento", B: "Se oculta profundamente en el sistema", C: "Solo afecta redes WiFi", D: "Solo roba cookies" },
+        correcta: "B",
+        explicacion: "Un rootkit se instala a nivel de kernel u arranque, ocultándose de los antivirus y herramientas del sistema. Puede ocultar procesos, archivos y conexiones de red maliciosas."
+      },
+      {
+        id: 21, tema: "SOR – Promoción DC",
+        enunciado: "Promover un servidor implica:",
+        opciones: { A: "Convertirlo en cliente", B: "Instalar AD DS y convertirlo en DC", C: "Activar RAID", D: "Instalar RSAT" },
+        correcta: "B",
+        explicacion: "Promover un servidor significa ejecutar el asistente de AD DS que instala y configura Active Directory, convirtiendo el servidor en un Domain Controller del dominio especificado."
+      },
+      {
+        id: 22, tema: "SOR – DNS y Dominio",
+        enunciado: "Si el DNS del cliente apunta mal, no podrá:",
+        opciones: { A: "Navegar", B: "Resolver el DC y unirse al dominio", C: "Usar Bluetooth", D: "Usar teclado" },
+        correcta: "B",
+        explicacion: "El cliente necesita DNS para localizar el DC mediante registros SRV. Si el DNS está mal configurado, no puede resolver el nombre del dominio y el proceso de unión y autenticación falla."
+      },
+      {
+        id: 23, tema: "SOR – RODC",
+        enunciado: "Un RODC es recomendable en:",
+        opciones: { A: "Sede principal", B: "Sede remota con menor seguridad física", C: "Laboratorio doméstico", D: "Router doméstico" },
+        correcta: "B",
+        explicacion: "El RODC está diseñado para sedes remotas donde la seguridad física del servidor es inferior. Al ser de solo lectura, si el servidor es robado o comprometido, el impacto en AD es mínimo."
+      },
+      {
+        id: 24, tema: "SOR – RSAT",
+        enunciado: "RSAT permite:",
+        opciones: { A: "Gestionar AD desde Windows cliente", B: "Crear RAID", C: "Instalar imágenes PXE", D: "Reemplazar DC" },
+        correcta: "A",
+        explicacion: "RSAT (Remote Server Administration Tools) instala en el cliente Windows las mismas herramientas de administración que existen en el servidor, permitiendo gestionar AD, DNS, DHCP y más remotamente."
+      },
+      {
+        id: 25, tema: "SOR – WDS",
+        enunciado: "WDS requiere obligatoriamente:",
+        opciones: { A: "Solo DHCP", B: "AD, DHCP y DNS", C: "Solo DNS", D: "Solo BIOS" },
+        correcta: "B",
+        explicacion: "WDS requiere que en la red existan tres servicios: Active Directory (autenticación), DHCP (asignar IP durante arranque PXE) y DNS (resolución de nombres). Los tres son obligatorios."
+      },
+      {
+        id: 26, tema: "SOR – RAID",
+        enunciado: "Un RAID5 puede sobrevivir a:",
+        opciones: { A: "Fallo de todos los discos", B: "Fallo de un disco", C: "Fallo de CPU", D: "Fallo de red" },
+        correcta: "B",
+        explicacion: "RAID5 tolera el fallo de un disco gracias a la paridad distribuida. Con los datos y la paridad de los discos restantes se puede reconstruir completamente el disco fallido."
+      },
+      {
+        id: 27, tema: "SOR – PowerShell",
+        enunciado: "PowerShell remoting se habilita con:",
+        opciones: { A: "Enable-PSRemoting", B: "Start-Domain", C: "Set-RAID", D: "Add-Client" },
+        correcta: "A",
+        explicacion: "Enable-PSRemoting configura WinRM (Windows Remote Management) en el servidor para aceptar conexiones remotas de PowerShell, habilitando la administración remota mediante cmdlets."
+      },
+      {
+        id: 28, tema: "SOR – LDAP",
+        enunciado: "En LDAP, OU representa:",
+        opciones: { A: "Usuario", B: "Unidad organizativa", C: "Controlador físico", D: "Dominio completo" },
+        correcta: "B",
+        explicacion: "OU (Organizational Unit) es un atributo LDAP que identifica las unidades organizativas en la jerarquía de AD. Aparece en el Distinguished Name, por ejemplo: OU=Marketing,DC=empresa,DC=com."
+      },
+      {
+        id: 29, tema: "SOR – Estructura AD",
+        enunciado: "Un bosque define:",
+        opciones: { A: "Un único usuario", B: "Conjunto de dominios", C: "Un RAID", D: "Un SIEM" },
+        correcta: "B",
+        explicacion: "El bosque (forest) es la unidad organizativa más alta en AD y define el conjunto de todos los dominios y árboles que comparten el mismo esquema y catálogo global."
+      },
+      {
+        id: 30, tema: "SOR – Replicación AD",
+        enunciado: "La replicación AD garantiza:",
+        opciones: { A: "Mismo BIOS", B: "Copia sincronizada entre DCs", C: "Mismo disco", D: "Mismo antivirus" },
+        correcta: "B",
+        explicacion: "La replicación AD sincroniza automáticamente los cambios entre todos los DCs del dominio, garantizando que todos tengan una copia idéntica y actualizada de la base de datos."
+      },
+      {
+        id: 31, tema: "SOR – PowerShell",
+        enunciado: "New-ADUser crea:",
+        opciones: { A: "OU", B: "Grupo", C: "Usuario", D: "Dominio" },
+        correcta: "C",
+        explicacion: "New-ADUser es el cmdlet de PowerShell para crear cuentas de usuario en Active Directory. Requiere al menos -Name y -Path, y admite parámetros como -AccountPassword, -Enabled, etc."
+      },
+      {
+        id: 32, tema: "SOR – Autenticación",
+        enunciado: "La autenticación en dominio es:",
+        opciones: { A: "Distribuida", B: "Centralizada en DC", C: "Manual", D: "Local" },
+        correcta: "B",
+        explicacion: "Toda autenticación en el dominio pasa por el DC. El DC verifica las credenciales del usuario contra la base de datos AD y emite el token de autenticación (ticket Kerberos)."
+      },
+      {
+        id: 33, tema: "SOR – Estructura AD",
+        enunciado: "Un dominio representa:",
+        opciones: { A: "Límite de seguridad", B: "Topología física", C: "VLAN", D: "Firewall" },
+        correcta: "A",
+        explicacion: "Un dominio AD es un límite de seguridad lógico: las políticas de grupo, los permisos y la base de datos de objetos están circunscritos al dominio. Es la unidad básica de administración de AD."
+      },
+      {
+        id: 34, tema: "SOR – Administración Remota",
+        enunciado: "Para administración remota se habilita:",
+        opciones: { A: "Escritorio remoto", B: "RAID", C: "DHCP", D: "Token Ring" },
+        correcta: "A",
+        explicacion: "Para administrar un servidor Windows remotamente con interfaz gráfica se habilita el Escritorio remoto (RDP, puerto 3389) desde las Propiedades del sistema del servidor."
+      },
+      {
+        id: 35, tema: "SOR – Nivel Funcional",
+        enunciado: "El nivel funcional determina:",
+        opciones: { A: "Capacidad RAM", B: "Funciones disponibles en dominio/bosque", C: "IP", D: "RAID" },
+        correcta: "B",
+        explicacion: "El nivel funcional controla qué características avanzadas de AD están disponibles. Un nivel funcional más alto (versión más reciente de Windows Server) habilita más funcionalidades."
+      },
+      {
+        id: 36, tema: "SOR – Sistema de Archivos",
+        enunciado: "ReFS mejora:",
+        opciones: { A: "Seguridad y tolerancia en sistema de archivos", B: "WiFi", C: "DHCP", D: "LDAP" },
+        correcta: "A",
+        explicacion: "ReFS (Resilient File System) mejora la integridad de datos y la tolerancia a fallos del sistema de archivos. Detecta y en algunos casos corrige automáticamente la corrupción de datos."
+      },
+      {
+        id: 37, tema: "SOR – DHCP",
+        enunciado: "DHCP en dominio debe:",
+        opciones: { A: "Ser autorizado", B: "Ser manual", C: "Ser externo siempre", D: "Ser opcional" },
+        correcta: "A",
+        explicacion: "En un dominio AD, el servidor DHCP debe ser autorizado explícitamente en Active Directory. Sin esta autorización, el servidor DHCP no concede direcciones IP a los clientes."
+      },
+      {
+        id: 38, tema: "SOR – WDS",
+        enunciado: "Instalación remota requiere:",
+        opciones: { A: "PXE habilitado en cliente", B: "USB", C: "ISO local", D: "Bluetooth" },
+        correcta: "A",
+        explicacion: "La instalación remota mediante WDS requiere que el equipo cliente tenga habilitado el arranque PXE en su BIOS/UEFI, lo que le permite recibir una imagen de arranque desde el servidor WDS."
+      },
+      {
+        id: 39, tema: "SOR – RAID",
+        enunciado: "En RAID5, la paridad sirve para:",
+        opciones: { A: "Acelerar red", B: "Reconstruir datos ante fallo", C: "Autenticación", D: "DNS" },
+        correcta: "B",
+        explicacion: "La paridad en RAID5 es información de recuperación distribuida entre todos los discos. Si falla un disco, los datos se reconstruyen matemáticamente usando los datos y la paridad de los discos restantes."
+      },
+      {
+        id: 40, tema: "SOR – Active Directory",
+        enunciado: "La estructura lógica de AD es independiente de:",
+        opciones: { A: "Usuarios", B: "Topología física de red", C: "DNS", D: "GPO" },
+        correcta: "B",
+        explicacion: "Una ventaja clave de AD es que la estructura lógica (dominios, OUs, grupos) es completamente independiente de la topología física de la red (cables, switches, ubicación geográfica)."
+      }
+    ]
+  },
+
+  // ══════════════════════════════════════════════════════════
+  //  TEST 3 – NIVEL EXAMEN FINAL (Mixto y técnico)
+  // ══════════════════════════════════════════════════════════
+  test3: {
+    title: "Test 3 — Nivel Examen Final",
+    subtitle: "Mixto y técnico · Redes + Seguridad + SOR",
+    questions: [
+      {
+        id: 1, tema: "SOR – DNS y Dominio",
+        enunciado: "Un cliente puede hacer ping al DC pero no puede unirse al dominio. El problema más probable es:",
+        opciones: { A: "Firewall físico", B: "DNS mal configurado", C: "Cable defectuoso", D: "RAID mal creado" },
+        correcta: "B",
+        explicacion: "Si hay ping (ICMP funciona), la conectividad física y de red es correcta. El problema es que el cliente no puede resolver el nombre del dominio DNS para localizar el DC y completar la unión."
+      },
+      {
+        id: 2, tema: "Seguridad – Ataques",
+        enunciado: "En un ataque MITM, el atacante:",
+        opciones: { A: "Satura el servidor", B: "Se posiciona entre cliente y servidor", C: "Borra discos", D: "Cambia BIOS" },
+        correcta: "B",
+        explicacion: "MITM (Man-in-the-Middle): el atacante se interpone en la comunicación entre dos partes, pudiendo escuchar, interceptar y modificar el tráfico sin que las víctimas lo detecten."
+      },
+      {
+        id: 3, tema: "Redes – Modelo OSI",
+        enunciado: "En el modelo OSI, TCP pertenece a:",
+        opciones: { A: "Transporte", B: "Red", C: "Enlace", D: "Aplicación" },
+        correcta: "A",
+        explicacion: "TCP (Transmission Control Protocol) opera en la capa 4 (Transporte) del modelo OSI. Se encarga de la comunicación extremo a extremo, control de flujo, control de errores y garantía de entrega."
+      },
+      {
+        id: 4, tema: "Redes – Estándares IEEE",
+        enunciado: "IEEE 802.11 opera principalmente en:",
+        opciones: { A: "LAN cableada", B: "Redes inalámbricas", C: "Token Ring", D: "RAID" },
+        correcta: "B",
+        explicacion: "IEEE 802.11 es el estándar para redes Wi-Fi (Wireless LAN). Sus variantes (a/b/g/n/ac/ax) definen distintas velocidades y bandas de frecuencia para redes inalámbricas."
+      },
+      {
+        id: 5, tema: "SOR – RAID",
+        enunciado: "Un RAID5 mejora disponibilidad pero penaliza:",
+        opciones: { A: "Lectura", B: "Escritura", C: "Autenticación", D: "DNS" },
+        correcta: "B",
+        explicacion: "RAID5 tiene buen rendimiento de lectura pero penaliza las escrituras porque cada operación de escritura requiere leer los datos actuales, calcular la nueva paridad y escribir ambos."
+      },
+      {
+        id: 6, tema: "Seguridad – Malware",
+        enunciado: "Un rootkit es especialmente difícil de detectar porque:",
+        opciones: { A: "Usa DHCP", B: "Se integra profundamente en el sistema", C: "Usa Bluetooth", D: "Usa RSAT" },
+        correcta: "B",
+        explicacion: "Los rootkits operan a nivel de kernel o incluso de arranque (bootkit), modificando las llamadas al sistema para ocultar su presencia ante el sistema operativo y los antivirus convencionales."
+      },
+      {
+        id: 7, tema: "SOR – Estructura AD",
+        enunciado: "Un bosque puede contener varios dominios relacionados jerárquicamente en:",
+        opciones: { A: "Árbol", B: "VLAN", C: "Token Ring", D: "RAID" },
+        correcta: "A",
+        explicacion: "En AD, un árbol es un conjunto de dominios que comparten el mismo espacio de nombres DNS y están relacionados jerárquicamente. Un bosque puede contener uno o varios árboles."
+      },
+      {
+        id: 8, tema: "SOR – PowerShell",
+        enunciado: "PowerShell permite automatizar administración de dominio mediante:",
+        opciones: { A: "Scripts", B: "RAID", C: "PXE", D: "DHCP" },
+        correcta: "A",
+        explicacion: "PowerShell permite crear scripts (.ps1) que automatizan tareas repetitivas de administración de AD, como crear cuentas masivas, aplicar configuraciones o generar informes."
+      },
+      {
+        id: 9, tema: "SOR – Unidades Organizativas",
+        enunciado: "Una OU permite delegar:",
+        opciones: { A: "BIOS", B: "Administración específica", C: "RAID", D: "MAC" },
+        correcta: "B",
+        explicacion: "La delegación de administración en OUs permite asignar a un usuario o grupo el control administrativo de una OU específica sin darle privilegios de administrador de todo el dominio."
+      },
+      {
+        id: 10, tema: "Seguridad – Principios CIA",
+        enunciado: "Un ataque DDoS afecta principalmente a:",
+        opciones: { A: "Confidencialidad", B: "Disponibilidad", C: "Integridad", D: "Autenticación" },
+        correcta: "B",
+        explicacion: "DDoS ataca la disponibilidad del servicio: su objetivo es dejar el servicio inaccesible para los usuarios legítimos saturando los recursos del servidor o la red."
+      },
+      {
+        id: 11, tema: "Redes – Codificación",
+        enunciado: "AMI (Alternate Mark Inversion) codifica los unos con:",
+        opciones: { A: "Nivel constante alto", B: "Alternancia entre +V y -V", C: "Retorno a cero siempre", D: "Solo nivel bajo" },
+        correcta: "B",
+        explicacion: "AMI codifica los bits 1 alternando entre voltaje positivo (+V) y negativo (-V) sucesivamente, mientras que los 0 se representan como 0V. Esto equilibra la señal y facilita la detección de errores."
+      },
+      {
+        id: 12, tema: "Redes – IPv4",
+        enunciado: "El campo TTL en un datagrama IPv4 sirve para:",
+        opciones: { A: "Cifrar el paquete", B: "Evitar bucles infinitos de enrutamiento", C: "Autenticar el emisor", D: "Comprimir la cabecera" },
+        correcta: "B",
+        explicacion: "TTL (Time To Live): cada router decrementa este campo en 1. Cuando llega a 0, el paquete se descarta y se envía un ICMP Time Exceeded al origen, evitando que paquetes circulen infinitamente."
+      },
+      {
+        id: 13, tema: "Seguridad – Ataques",
+        enunciado: "El ransomware afecta principalmente a:",
+        opciones: { A: "Disponibilidad de hardware", B: "Confidencialidad e integridad de datos", C: "Velocidad de red", D: "Configuración DNS" },
+        correcta: "B",
+        explicacion: "El ransomware cifra los archivos de la víctima (afecta a la confidencialidad e integridad). Los datos quedan ilegibles y exige un rescate para restaurarlos."
+      },
+      {
+        id: 14, tema: "SOR – Active Directory",
+        enunciado: "El archivo ntds.dit contiene:",
+        opciones: { A: "La base de datos de Active Directory", B: "Configuración de red", C: "Los logs del firewall", D: "Las imágenes WDS" },
+        correcta: "A",
+        explicacion: "ntds.dit (NT Directory Services Directory Information Tree) es el archivo de base de datos principal de Active Directory. Contiene todos los objetos del dominio: usuarios, grupos, equipos, políticas, etc."
+      },
+      {
+        id: 15, tema: "Redes – Protocolos",
+        enunciado: "¿Qué protocolo de capa de aplicación resuelve nombres de dominio a IPs?",
+        opciones: { A: "DHCP", B: "DNS", C: "ARP", D: "SMTP" },
+        correcta: "B",
+        explicacion: "DNS (Domain Name System) opera en la capa de aplicación y resuelve nombres de dominio legibles (www.ejemplo.com) a direcciones IP numéricas que los routers pueden enrutar."
+      },
+      {
+        id: 16, tema: "Seguridad – Ingeniería Social",
+        enunciado: "El baiting consiste en:",
+        opciones: { A: "Saturar con peticiones", B: "Dejar un USB infectado para que la víctima lo conecte", C: "Inyectar SQL", D: "Escanear puertos" },
+        correcta: "B",
+        explicacion: "Baiting (cebo) es una técnica de ingeniería social que consiste en dejar un dispositivo (típicamente un USB) infectado en un lugar visible para que la víctima lo conecte, ejecutando el malware."
+      },
+      {
+        id: 17, tema: "SOR – Grupos AD",
+        enunciado: "¿Qué tipo de grupo de AD puede usarse en ACLs para asignar permisos a recursos?",
+        opciones: { A: "Distribución", B: "Seguridad", C: "Universal solo", D: "Local solo" },
+        correcta: "B",
+        explicacion: "Solo los grupos de tipo Seguridad pueden añadirse a las ACL (Access Control Lists) para conceder o denegar permisos sobre recursos. Los grupos de Distribución sirven únicamente para correo."
+      },
+      {
+        id: 18, tema: "Redes – Topologías",
+        enunciado: "En una topología en bus, un fallo del cable principal produce:",
+        opciones: { A: "Solo afecta al equipo más cercano", B: "La red completa deja de funcionar", C: "Solo afecta al nodo central", D: "No produce ningún efecto" },
+        correcta: "B",
+        explicacion: "En topología bus, todos los equipos comparten el mismo cable troncal. Si este cable se rompe o falla, la red completa queda inoperativa ya que no existe ruta alternativa."
+      },
+      {
+        id: 19, tema: "SOR – PowerShell",
+        enunciado: "El orden correcto para crear objetos en AD con PowerShell es:",
+        opciones: { A: "Usuarios → Grupos → OU", B: "OU → Grupos → Usuarios", C: "Grupos → Usuarios → OU", D: "DC → OU → Todo" },
+        correcta: "B",
+        explicacion: "El orden correcto es OU primero (los contenedores deben existir antes), luego Grupos (que se ubicarán en las OUs) y finalmente Usuarios (que se añadirán a las OUs y grupos existentes)."
+      },
+      {
+        id: 20, tema: "Seguridad – Herramientas",
+        enunciado: "Nessus es principalmente un:",
+        opciones: { A: "Antivirus", B: "Escáner de vulnerabilidades", C: "Firewall", D: "SIEM" },
+        correcta: "B",
+        explicacion: "Nessus es uno de los escáneres de vulnerabilidades más populares. Analiza sistemas y redes en busca de vulnerabilidades conocidas, configuraciones incorrectas y posibles brechas de seguridad."
+      },
+      {
+        id: 21, tema: "SOR – WDS",
+        enunciado: "WDS debe instalarse en una partición diferente al SO porque:",
+        opciones: { A: "Solo funciona en NTFS", B: "Evita conflictos y garantiza funcionamiento correcto del servicio", C: "ReFS lo requiere", D: "El DC lo exige" },
+        correcta: "B",
+        explicacion: "Es un requisito crítico de WDS: instalarlo en una partición o unidad diferente a la del SO evita conflictos en el arranque PXE y garantiza que el servicio funcione correctamente."
+      },
+      {
+        id: 22, tema: "Redes – Protocolos",
+        enunciado: "ARP sirve para:",
+        opciones: { A: "Asignar IP automáticamente", B: "Resolver una IP a su dirección MAC", C: "Enrutar entre redes", D: "Cifrar tráfico" },
+        correcta: "B",
+        explicacion: "ARP (Address Resolution Protocol) resuelve direcciones IP a direcciones MAC dentro de una red local. Envía un broadcast preguntando '¿Quién tiene la IP X?' y el propietario responde con su MAC."
+      },
+      {
+        id: 23, tema: "Seguridad – Principios CIA",
+        enunciado: "El no repudio en seguridad garantiza:",
+        opciones: { A: "Que nadie pueda acceder", B: "Que nadie pueda negar haber realizado una acción", C: "Que los datos no se modifiquen", D: "Que el sistema esté disponible" },
+        correcta: "B",
+        explicacion: "El no repudio garantiza que un usuario no pueda negar haber realizado una acción (enviar un mensaje, firmar un documento). Se implementa con firmas digitales y registros de auditoría."
+      },
+      {
+        id: 24, tema: "SOR – RAID",
+        enunciado: "RAID0 (striping) ofrece:",
+        opciones: { A: "Tolerancia a fallos", B: "Mayor rendimiento sin tolerancia a fallos", C: "Paridad distribuida", D: "Espejo completo" },
+        correcta: "B",
+        explicacion: "RAID0 distribuye los datos entre discos (striping) para máximo rendimiento en lectura/escritura, pero no ofrece ninguna tolerancia a fallos. Si falla un disco, se pierden todos los datos."
+      },
+      {
+        id: 25, tema: "Redes – Modelo OSI",
+        enunciado: "¿Qué capa OSI es responsable del establecimiento, gestión y cierre de sesiones?",
+        opciones: { A: "Presentación", B: "Sesión", C: "Transporte", D: "Aplicación" },
+        correcta: "B",
+        explicacion: "La capa 5 (Sesión) gestiona el establecimiento, mantenimiento y terminación de sesiones de comunicación entre aplicaciones en diferentes equipos."
+      },
+      {
+        id: 26, tema: "SOR – Active Directory",
+        enunciado: "La carpeta SYSVOL en un DC contiene:",
+        opciones: { A: "La base de datos ntds.dit", B: "GPO y scripts replicados entre DCs", C: "Las imágenes WDS", D: "Los logs de eventos" },
+        correcta: "B",
+        explicacion: "SYSVOL es una carpeta compartida y replicada entre todos los DCs del dominio. Contiene las políticas de grupo (GPO), scripts de inicio de sesión y otros archivos que deben estar disponibles en todo el dominio."
+      },
+      {
+        id: 27, tema: "Seguridad – Ataques",
+        enunciado: "SQL Injection es un ataque que:",
+        opciones: { A: "Satura el servidor con peticiones", B: "Inyecta código SQL malicioso en campos de entrada", C: "Intercepta tráfico de red", D: "Cifra archivos del servidor" },
+        correcta: "B",
+        explicacion: "SQL Injection inserta sentencias SQL maliciosas en campos de entrada de una aplicación web para manipular la base de datos, pudiendo extraer datos, modificarlos o eliminarlos."
+      },
+      {
+        id: 28, tema: "Redes – Codificación",
+        enunciado: "4B/5B introduce una sobrecarga del 25% porque:",
+        opciones: { A: "Añade 4 bits extra por cada byte", B: "Convierte cada 4 bits en 5 bits", C: "Duplica la señal", D: "Triplica las transiciones" },
+        correcta: "B",
+        explicacion: "4B/5B convierte cada grupo de 4 bits en un código de 5 bits, añadiendo 1 bit extra por cada 4 (25% de sobrecarga). Garantiza suficientes transiciones para sincronización evitando largas secuencias de ceros."
+      },
+      {
+        id: 29, tema: "SOR – Nivel Funcional",
+        enunciado: "Para elevar el nivel funcional del dominio, todos los DCs deben ejecutar:",
+        opciones: { A: "La versión mínima requerida o superior", B: "La misma versión exacta", C: "Solo Windows Server 2008", D: "Solo versiones Core" },
+        correcta: "A",
+        explicacion: "Para elevar el nivel funcional, todos los DCs del dominio deben estar ejecutando una versión de Windows Server igual o superior al nivel funcional que se quiere establecer."
+      },
+      {
+        id: 30, tema: "Seguridad – Control de Acceso",
+        enunciado: "El principio de mínimo privilegio establece que:",
+        opciones: { A: "Los administradores tienen acceso total siempre", B: "Los usuarios solo deben tener los permisos estrictamente necesarios", C: "Todos los usuarios tienen los mismos permisos", D: "El acceso se otorga por defecto" },
+        correcta: "B",
+        explicacion: "El principio de mínimo privilegio (least privilege) establece que cada usuario o proceso debe tener únicamente los permisos imprescindibles para realizar su función y nada más."
+      },
+      {
+        id: 31, tema: "SOR – PowerShell",
+        enunciado: "Para crear un usuario en AD con PowerShell se usa:",
+        opciones: { A: "New-ADGroup", B: "New-ADOrganizationalUnit", C: "New-ADUser", D: "Get-ADUser" },
+        correcta: "C",
+        explicacion: "New-ADUser es el cmdlet para crear cuentas de usuario en Active Directory. Permite especificar todos los atributos del usuario como nombre, contraseña, OU de destino, etc."
+      },
+      {
+        id: 32, tema: "Redes – Protocolos",
+        enunciado: "SSH proporciona:",
+        opciones: { A: "Transmisión sin cifrado", B: "Acceso remoto cifrado y seguro", C: "Solo transferencia de archivos", D: "Resolución DNS" },
+        correcta: "B",
+        explicacion: "SSH (Secure Shell) proporciona acceso remoto seguro mediante cifrado asimétrico y simétrico. Es el reemplazo seguro de Telnet, que transmitía todo en texto plano."
+      },
+      {
+        id: 33, tema: "SOR – Administración Remota",
+        enunciado: "Para conectarse por Escritorio Remoto desde otra red de forma segura, se recomienda:",
+        opciones: { A: "Abrir el puerto 3389 directamente en Internet", B: "Usar una VPN primero", C: "Desactivar el firewall", D: "Usar HTTP" },
+        correcta: "B",
+        explicacion: "Exponer RDP directamente a Internet es un grave riesgo de seguridad. La práctica recomendada es usar una VPN para crear un túnel cifrado y luego conectarse por RDP dentro de ese túnel seguro."
+      },
+      {
+        id: 34, tema: "Seguridad – Malware",
+        enunciado: "Un gusano (worm) se diferencia de un virus en que:",
+        opciones: { A: "Solo afecta a Windows", B: "Se replica automáticamente por la red sin necesitar un archivo huésped", C: "Necesita que el usuario lo ejecute manualmente", D: "Solo cifra archivos" },
+        correcta: "B",
+        explicacion: "Un gusano se autoreplica y propaga por la red de forma autónoma, sin necesitar un archivo huésped. Un virus necesita incrustarse en un programa legítimo para propagarse."
+      },
+      {
+        id: 35, tema: "SOR – Active Directory",
+        enunciado: "El Catálogo Global en AD sirve para:",
+        opciones: { A: "Almacenar solo los DCs", B: "Facilitar búsquedas en todo el bosque", C: "Gestionar RAID", D: "Configurar DNS" },
+        correcta: "B",
         explicacion: "El Catálogo Global contiene una copia parcial de todos los objetos del bosque AD. Facilita búsquedas entre dominios y es necesario para el inicio de sesión en entornos multidominios."
       },
       {
-        id: 7, tema: "Active Directory",
-        enunciado: "Un bosque (forest) de Active Directory se define como…",
-        opciones: {
-          A: "un grupo de árboles que no comparten un espacio de nombres continuo",
-          B: "un único equipo cliente unido al dominio",
-          C: "un switch con VLANs",
-          D: "una red PAN personal"
-        },
-        correcta: "A",
-        explicacion: "Un bosque AD es la unidad más alta de organización: agrupa múltiples árboles de dominios con espacios de nombres distintos que comparten el esquema y el Catálogo Global."
-      },
-      {
-        id: 8, tema: "Active Directory",
-        enunciado: "¿Cuáles son dos tipos básicos de relaciones de confianza (trust) entre dominios?",
-        opciones: {
-          A: "Unidireccionales y bidireccionales",
-          B: "Locales y remotas",
-          C: "IPv4 e IPv6",
-          D: "Analógicas y digitales"
-        },
-        correcta: "A",
-        explicacion: "Las relaciones de confianza permiten que usuarios de un dominio accedan a recursos de otro. Pueden ser unidireccionales (A confía en B) o bidireccionales (A y B se confían mutuamente)."
-      },
-      {
-        id: 9, tema: "Active Directory",
-        enunciado: "En LDAP/AD, ¿qué significa el atributo CN?",
-        opciones: {
-          A: "Common Name",
-          B: "Client Node",
-          C: "Core Network",
-          D: "Credential Number"
-        },
-        correcta: "A",
-        explicacion: "CN (Common Name) es el nombre común del objeto en LDAP/AD. Por ejemplo, CN=Juan García,OU=Ventas,DC=empresa,DC=com identifica al usuario 'Juan García' dentro de la OU Ventas."
-      },
-      {
-        id: 10, tema: "Active Directory",
-        enunciado: "En el comando `dsadd user`, ¿qué parámetro controla la obligación de cambiar la contraseña en el primer inicio de sesión?",
-        opciones: { A: "-canchpwd", B: "-ttl", C: "-dhcp", D: "-raid" },
-        correcta: "A",
-        explicacion: "El parámetro -canchpwd (can change password) en dsadd user controla si el usuario puede/debe cambiar la contraseña. Combinado con -mustchpwd se obliga el cambio en el primer inicio."
-      },
-      {
-        id: 11, tema: "Administración Remota",
-        enunciado: "Si quieres conectarte por Escritorio Remoto a un servidor desde otra red, el material sugiere como alternativa segura…",
-        opciones: {
-          A: "Montar una VPN",
-          B: "Desactivar el firewall del router",
-          C: "Usar HTTP sin cifrar",
-          D: "Compartir la contraseña por correo"
-        },
-        correcta: "A",
-        explicacion: "La VPN (Red Privada Virtual) crea un túnel cifrado que permite conectarse de forma segura a la red corporativa desde Internet, después de lo cual se puede usar RDP con seguridad."
-      },
-      {
-        id: 12, tema: "Modelo OSI",
-        enunciado: "En el modelo OSI, la PDU de la capa de Enlace de Datos es…",
-        opciones: { A: "Trama (Frame)", B: "Segmento", C: "Paquete", D: "Bit" },
-        correcta: "A",
-        explicacion: "Cada capa OSI tiene su PDU: Física=Bit, Enlace=Trama(Frame), Red=Paquete, Transporte=Segmento, Sesión/Presentación/Aplicación=Mensaje o Dato."
-      },
-      {
-        id: 13, tema: "Modelo OSI",
-        enunciado: "En el modelo OSI, la PDU de la capa Física es…",
-        opciones: { A: "Bit", B: "Datagrama", C: "Trama", D: "Mensaje" },
-        correcta: "A",
-        explicacion: "La capa Física trabaja con bits individuales: se encarga de la transmisión de señales eléctricas, ópticas o de radio. Su PDU (Protocol Data Unit) es el bit."
-      },
-      {
-        id: 14, tema: "Tipos de Redes",
-        enunciado: "En la clasificación por alcance geográfico, ¿qué significa BAN?",
-        opciones: {
-          A: "Body Area Network (red alrededor/dentro del cuerpo)",
-          B: "Broadcast Area Network",
-          C: "Backbone Access Network",
-          D: "Basic Area Network"
-        },
-        correcta: "A",
-        explicacion: "BAN (Body Area Network) es una red de muy corto alcance que conecta dispositivos en el cuerpo humano o muy cerca de él, como sensores médicos, wearables o implantes."
-      },
-      {
-        id: 15, tema: "Acceso al Medio",
-        enunciado: "¿Qué método de acceso al medio se asocia al estándar IEEE 802.3 (Ethernet) en el material?",
-        opciones: { A: "CSMA/CD", B: "Token Ring", C: "CSMA/CA", D: "FDMA" },
-        correcta: "A",
-        explicacion: "CSMA/CD (Carrier Sense Multiple Access with Collision Detection) es el método de acceso al medio de Ethernet. Detecta colisiones y retransmite. CSMA/CA se usa en Wi-Fi para evitar colisiones."
-      },
-      {
-        id: 16, tema: "Acceso al Medio",
-        enunciado: "¿Qué técnica de acceso múltiple divide el canal en ranuras de tiempo?",
-        opciones: { A: "TDMA", B: "FDMA", C: "CDMA", D: "DSSS" },
-        correcta: "A",
-        explicacion: "TDMA (Time Division Multiple Access) divide el canal en ranuras de tiempo: cada usuario transmite en su ranura asignada. Se usa en GSM y otros sistemas de comunicación."
-      },
-      {
-        id: 17, tema: "Teoría de Transmisión",
-        enunciado: "¿Qué expresión corresponde al teorema de Shannon-Hartley para la capacidad de un canal?",
-        opciones: {
-          A: "C = B log2(1+S/N)",
-          B: "C = 2B log2(M)",
-          C: "A(dB)=10 log10(PotR/PotT)",
-          D: "C = S·N"
-        },
-        correcta: "A",
-        explicacion: "Shannon-Hartley: C = B × log2(1 + S/N). C es la capacidad máxima del canal (bps), B es el ancho de banda (Hz) y S/N es la relación señal/ruido. Determina el límite teórico de transmisión."
-      },
-      {
-        id: 18, tema: "Sistemas Operativos",
-        enunciado: "La shell en un sistema operativo se define mejor como…",
-        opciones: {
-          A: "la interfaz entre el usuario y el kernel para ejecutar comandos",
-          B: "el componente físico de la placa base",
-          C: "un tipo de malware",
-          D: "un algoritmo de compresión"
-        },
-        correcta: "A",
-        explicacion: "La shell es el intérprete de comandos que actúa como interfaz entre el usuario y el kernel. Puede ser CLI (bash, cmd, PowerShell) o GUI. Permite ejecutar programas y administrar el sistema."
-      },
-      {
-        id: 19, tema: "TCP/UDP",
-        enunciado: "¿Qué característica describe mejor a TCP?",
-        opciones: {
-          A: "Orientado a conexión (connection-oriented)",
-          B: "Sin conexión y sin control de errores",
-          C: "Solo funciona en la capa física",
-          D: "No usa puertos"
-        },
-        correcta: "A",
-        explicacion: "TCP es orientado a conexión: establece una conexión (3-way handshake), garantiza entrega ordenada con control de errores y flujo. UDP es el protocolo sin conexión para cuando la velocidad prima."
-      },
-      {
-        id: 20, tema: "TCP/UDP",
-        enunciado: "¿Cuál es el orden correcto del establecimiento de conexión TCP (3-way handshake)?",
-        opciones: {
-          A: "SYN → SYN-ACK → ACK",
-          B: "ACK → SYN → FIN",
-          C: "FIN → FIN-ACK → ACK",
-          D: "SYN → ACK → SYN-ACK"
-        },
-        correcta: "A",
-        explicacion: "El 3-way handshake TCP: (1) Cliente envía SYN, (2) Servidor responde SYN-ACK confirmando e iniciando su propia conexión, (3) Cliente confirma con ACK. La conexión queda establecida."
-      },
-      {
-        id: 21, tema: "Linux - Redes",
-        enunciado: "En Linux, ¿qué comando evita que NetworkManager se inicie automáticamente al arrancar?",
-        opciones: {
-          A: "systemctl disable network-manager",
-          B: "systemctl start ssh",
-          C: "nmcli con add",
-          D: "ifconfig -a"
-        },
-        correcta: "A",
-        explicacion: "systemctl disable [servicio] deshabilita el inicio automático de un servicio en el arranque. Para evitar que NetworkManager arranque: systemctl disable NetworkManager (o network-manager en Debian/Ubuntu)."
-      },
-      {
-        id: 22, tema: "Seguridad Ofensiva",
-        enunciado: "La seguridad ofensiva se caracteriza por…",
-        opciones: {
-          A: "simular ataques para identificar y corregir vulnerabilidades antes de que se exploten",
-          B: "bloquear todo el tráfico entrante siempre",
-          C: "hacer copias de seguridad automáticas",
-          D: "encriptar discos sin auditoría"
-        },
-        correcta: "A",
-        explicacion: "La seguridad ofensiva (ethical hacking, pentesting) simula ataques reales para descubrir vulnerabilidades antes que los atacantes. Complementa a la seguridad defensiva."
-      },
-      {
-        id: 23, tema: "Modulación",
-        enunciado: "En ASK (Amplitude Shift Keying), la información se codifica mediante cambios en…",
-        opciones: { A: "la amplitud", B: "la frecuencia", C: "la fase", D: "el número de routers" },
-        correcta: "A",
-        explicacion: "ASK (Modulación por Desplazamiento de Amplitud): la información se representa variando la amplitud de la portadora. Por ejemplo, amplitud alta = 1, amplitud baja o nula = 0."
-      },
-      {
-        id: 24, tema: "Modulación",
-        enunciado: "En FSK (Frequency Shift Keying), la información se codifica mediante cambios en…",
-        opciones: {
-          A: "la frecuencia",
-          B: "la amplitud",
-          C: "la polaridad del cable",
-          D: "el ancho de banda fijo"
-        },
-        correcta: "A",
-        explicacion: "FSK (Modulación por Desplazamiento de Frecuencia): los datos se representan usando diferentes frecuencias de la portadora. Frecuencia f1 = bit 0, frecuencia f2 = bit 1 (o viceversa)."
-      },
-      {
-        id: 25, tema: "Modulación",
-        enunciado: "En PSK (Phase Shift Keying), la información se codifica mediante cambios en…",
-        opciones: { A: "la fase", B: "la amplitud", C: "la frecuencia", D: "la ruta de red" },
-        correcta: "A",
-        explicacion: "PSK (Modulación por Desplazamiento de Fase): la información se representa modificando la fase de la portadora. BPSK usa 2 fases (0°/180°), QPSK usa 4 (0°/90°/180°/270°)."
-      },
-      {
-        id: 26, tema: "Modulación",
-        enunciado: "PAM-4 significa que se utilizan…",
-        opciones: { A: "4 niveles de amplitud", B: "4 frecuencias", C: "4 fases", D: "4 cables de red" },
-        correcta: "A",
-        explicacion: "PAM-4 (Pulse Amplitude Modulation 4-level) usa 4 niveles de amplitud distintos para representar 2 bits por símbolo (00, 01, 10, 11). Se usa en Ethernet de 400G y superiores."
-      },
-      {
-        id: 27, tema: "Codificación de Señales",
-        enunciado: "HDB3 es una mejora de…",
-        opciones: {
-          A: "AMI, introduciendo violaciones para largas secuencias de ceros",
-          B: "Manchester, eliminando transiciones",
-          C: "NRZ-L, duplicando ancho de banda",
-          D: "PAM-4, reduciendo niveles"
-        },
-        correcta: "A",
-        explicacion: "HDB3 (High Density Bipolar 3) mejora AMI: cuando aparecen más de 3 ceros consecutivos, los sustituye por una secuencia especial con una violación intencionada para mantener la sincronización."
-      },
-      {
-        id: 28, tema: "Codificación de Señales",
-        enunciado: "8B/10B consiste en…",
-        opciones: {
-          A: "convertir 8 bits en 10 bits para asegurar sincronización y balance de señal",
-          B: "convertir 10 bits en 8 bits para comprimir",
-          C: "usar 8 niveles y 10 frecuencias",
-          D: "codificar solo ceros"
-        },
-        correcta: "A",
-        explicacion: "8B/10B convierte cada byte (8 bits) en un código de 10 bits. Garantiza que no haya más de 5 bits iguales consecutivos (sincronización) y equilibra la señal (igual número de 1s y 0s)."
-      },
-      {
-        id: 29, tema: "Puertos y Protocolos",
-        enunciado: "Si un datagrama UDP va dirigido al puerto 53, lo más probable es que sea tráfico de…",
-        opciones: { A: "DNS", B: "HTTP", C: "SSH", D: "SMTP" },
-        correcta: "A",
-        explicacion: "El puerto 53 (UDP y TCP) es el puerto estándar de DNS (Domain Name System). UDP/53 se usa para consultas DNS normales; TCP/53 para transferencias de zona y respuestas largas."
-      },
-      {
-        id: 30, tema: "TCP",
-        enunciado: "En un encabezado TCP, un tamaño de ventana 0x2000 equivale a…",
-        opciones: { A: "8192", B: "2048", C: "2000", D: "4096" },
-        correcta: "A",
-        explicacion: "0x2000 en hexadecimal: 2×16³ = 2×4096 = 8192. El tamaño de ventana TCP indica cuántos bytes puede recibir el receptor sin confirmación ACK (control de flujo)."
-      },
-      {
-        id: 31, tema: "TCP",
-        enunciado: "En TCP, un Data Offset = 5 indica que la cabecera mide…",
-        opciones: { A: "20 bytes", B: "5 bytes", C: "32 bytes", D: "40 bytes" },
-        correcta: "A",
-        explicacion: "El Data Offset indica el tamaño de la cabecera TCP en unidades de 32 bits (4 bytes). Data Offset = 5 → 5 × 4 = 20 bytes. Es el tamaño mínimo de la cabecera TCP sin opciones."
-      },
-      {
-        id: 32, tema: "Tipos de Ataques",
-        enunciado: "¿Qué describe mejor el spoofing?",
-        opciones: {
-          A: "Suplantación de identidad (p. ej., ARP/IP/DNS spoofing)",
-          B: "Cifrado de archivos con rescate",
-          C: "Actualización crítica del sistema",
-          D: "Compresión de tráfico"
-        },
-        correcta: "A",
-        explicacion: "Spoofing es falsificar la identidad de una entidad: IP spoofing (falsear IP origen), ARP spoofing (enviar respuestas ARP falsas), DNS spoofing (redirigir consultas DNS a IPs maliciosas)."
-      },
-      {
-        id: 33, tema: "Codificación de Señales",
-        enunciado: "Según el material, la codificación Diferencial Manchester se asocia típicamente a…",
-        opciones: {
-          A: "Token Ring (IEEE 802.5)",
-          B: "Ethernet (IEEE 802.3)",
-          C: "Wi-Fi (IEEE 802.11)",
-          D: "Bluetooth (IEEE 802.15)"
-        },
-        correcta: "A",
-        explicacion: "La codificación Manchester Diferencial se usa en Token Ring (IEEE 802.5). Es más robusta que Manchester estándar frente a inversiones de polaridad al usar transiciones relativas."
-      },
-      {
-        id: 34, tema: "Malware",
-        enunciado: "¿Qué es un keylogger?",
-        opciones: {
-          A: "Un programa que registra pulsaciones/credenciales en segundo plano",
-          B: "Un firewall de red",
-          C: "Un tipo de cifrado simétrico",
-          D: "Un protocolo de encaminamiento"
-        },
-        correcta: "A",
-        explicacion: "Un keylogger registra en secreto todas las pulsaciones del teclado, capturando contraseñas, mensajes y datos sensibles. Puede ser software (más común) o hardware (dispositivo USB entre teclado y PC)."
-      },
-      {
-        id: 35, tema: "Ingeniería Social",
-        enunciado: "En ingeniería social, pretexting es…",
-        opciones: {
-          A: "crear un escenario/identidad falsa para obtener información",
-          B: "usar solo fuerza bruta",
-          C: "cifrar discos automáticamente",
-          D: "cambiar la MAC del router"
-        },
-        correcta: "A",
-        explicacion: "Pretexting: el atacante crea un pretexto (historia falsa, identidad ficticia) para ganarse la confianza de la víctima y obtener información o acceso. Por ejemplo, hacerse pasar por técnico de soporte."
-      },
-      {
-        id: 36, tema: "Ingeniería Social",
-        enunciado: "En ingeniería social, tailgating es…",
-        opciones: {
-          A: "acceder a una zona restringida siguiendo a una persona autorizada",
-          B: "enviar spam masivo",
-          C: "hacer un escaneo de puertos",
-          D: "cambiar la contraseña del administrador"
-        },
-        correcta: "A",
-        explicacion: "Tailgating (piggybacking): acceso físico no autorizado a una zona segura siguiendo de cerca a alguien con acceso legítimo, aprovechando la cortesía de mantener la puerta abierta."
-      },
-      {
-        id: 37, tema: "Control de Acceso",
-        enunciado: "RBAC significa…",
-        opciones: {
-          A: "Role-Based Access Control (control de acceso por roles)",
-          B: "Router-Based Access Control",
-          C: "Risk-Based Access Calculation",
-          D: "Remote Backup Access Copy"
-        },
-        correcta: "A",
-        explicacion: "RBAC (Control de Acceso Basado en Roles) asigna permisos a roles (administrador, usuario, auditor) en lugar de a usuarios individuales. Los usuarios obtienen permisos al ser asignados a un rol."
-      },
-      {
-        id: 38, tema: "Gestión de Riesgos",
-        enunciado: "Una matriz de riesgos sirve para…",
-        opciones: {
-          A: "priorizar riesgos según probabilidad e impacto",
-          B: "medir voltajes en NRZ",
-          C: "calcular la cabecera TCP",
-          D: "comprimir imágenes JPEG"
-        },
-        correcta: "A",
-        explicacion: "La matriz de riesgos (probabilidad × impacto) permite visualizar y priorizar riesgos de seguridad. Los riesgos con alta probabilidad y alto impacto requieren atención inmediata."
-      },
-      {
-        id: 39, tema: "Malware",
-        enunciado: "¿Cuál es la diferencia más característica entre un virus y un gusano (worm)?",
-        opciones: {
-          A: "El gusano se replica y propaga por sí mismo; el virus suele incrustarse en otros programas",
-          B: "El virus siempre viaja por Wi-Fi y el gusano por cable",
-          C: "El gusano solo afecta a móviles",
-          D: "No hay ninguna diferencia"
-        },
-        correcta: "A",
-        explicacion: "El gusano (worm) se autopropaga por la red sin necesidad de un archivo huésped. El virus necesita incrustarse en un programa legítimo para propagarse. Los gusanos son más peligrosos en red."
-      },
-      {
-        id: 40, tema: "Seguridad Wi-Fi",
-        enunciado: "En redes Wi-Fi, ¿cuál de estos protocolos es (en general) más seguro que WEP?",
-        opciones: { A: "WPA2-PSK", B: "WEP", C: "FTP", D: "HTTP" },
-        correcta: "A",
-        explicacion: "WPA2-PSK usa AES (Advanced Encryption Standard) con clave de 128/256 bits, siendo mucho más seguro que WEP (que usa RC4 con claves de 40/104 bits con graves vulnerabilidades conocidas)."
-      }
-    ]
-  },
-
-  test3: {
-    title: "Test 3 - SOR Redes y Seguridad",
-    subtitle: "Sistemas Operativos en Red",
-    questions: [
-      {
-        id: 1, tema: "Sistemas de Archivos",
-        enunciado: "En NTFS, ¿qué característica permite limitar el espacio de disco que puede usar un usuario?",
-        opciones: {
-          A: "Cuotas de disco",
-          B: "Defragmentación automática",
-          C: "CSMA/CD",
-          D: "PAM-4"
-        },
-        correcta: "A",
-        explicacion: "Las cuotas de disco en NTFS permiten al administrador limitar la cantidad de espacio en disco que puede ocupar cada usuario, evitando que un usuario consuma todo el almacenamiento disponible."
-      },
-      {
-        id: 2, tema: "Sistemas de Archivos",
-        enunciado: "¿Qué característica de NTFS permite cifrar archivos/carpetas a nivel de sistema de archivos?",
-        opciones: { A: "EFS (Encrypting File System)", B: "WEP", C: "DHCP", D: "ARP" },
-        correcta: "A",
-        explicacion: "EFS (Encrypting File System) es una característica de NTFS que permite cifrar archivos y carpetas de forma transparente. Usa criptografía de clave pública y el cifrado es por usuario."
-      },
-      {
-        id: 3, tema: "Sistemas de Archivos",
-        enunciado: "¿Cuál es un objetivo principal de ReFS según el temario?",
-        opciones: {
-          A: "Detectar y reducir la corrupción de datos del sistema de archivos",
-          B: "Aumentar la velocidad del Wi-Fi",
-          C: "Reemplazar TCP por UDP",
-          D: "Eliminar la necesidad de backups"
-        },
-        correcta: "A",
-        explicacion: "ReFS (Resilient File System) tiene como objetivo principal la integridad y resiliencia de los datos: detecta la corrupción automáticamente y, en entornos con Storage Spaces, la puede corregir."
-      },
-      {
-        id: 4, tema: "Administración de Discos",
-        enunciado: "En Windows Server, ¿qué tipo de volumen ofrece paridad distribuida y requiere al menos 3 discos?",
-        opciones: {
-          A: "RAID-5",
-          B: "RAID-1",
-          C: "RAID-0",
-          D: "Volumen simple"
-        },
-        correcta: "A",
-        explicacion: "RAID-5 distribuye los datos y la paridad entre todos los discos del conjunto (mínimo 3). Ofrece tolerancia al fallo de un disco con mejor aprovechamiento de espacio que RAID-1."
-      },
-      {
-        id: 5, tema: "Administración de Sistemas",
-        enunciado: "¿Por qué se recomienda revisar el impacto de las actualizaciones antes de instalarlas en un servidor?",
-        opciones: {
-          A: "Porque una actualización puede afectar al entorno y provocar fallos en la red/servicios",
-          B: "Porque desinstala Active Directory",
-          C: "Porque obliga a usar FAT32",
-          D: "Porque elimina usuarios del dominio"
-        },
-        correcta: "A",
-        explicacion: "Las actualizaciones pueden introducir cambios en el comportamiento del sistema, incompatibilidades con aplicaciones o servicios en producción. Se recomienda probar en entorno de pruebas antes de aplicar en producción."
-      },
-      {
-        id: 6, tema: "Active Directory",
-        enunciado: "En Active Directory, ¿qué significa DIT?",
-        opciones: {
-          A: "Directory Information Tree",
-          B: "Data Integrity Tool",
-          C: "Domain Installation Task",
-          D: "Dynamic IP Table"
-        },
-        correcta: "A",
-        explicacion: "DIT (Directory Information Tree) es la estructura jerárquica en forma de árbol que organiza los objetos en un directorio LDAP/AD. ntds.dit es el archivo que contiene este árbol de información del directorio."
-      },
-      {
-        id: 7, tema: "Active Directory",
-        enunciado: "Según el material, ¿para qué se puede usar ADSIEdit.msc en un dominio?",
-        opciones: {
-          A: "Modificar propiedades de AD y, por ejemplo, restringir quién puede añadir equipos al dominio",
-          B: "Configurar modulación QPSK",
-          C: "Eliminar la capa de enlace OSI",
-          D: "Crear particiones ReFS"
-        },
-        correcta: "A",
-        explicacion: "ADSIEdit.msc es un editor de bajo nivel para el directorio LDAP de Active Directory. Permite modificar atributos avanzados, como ms-DS-MachineAccountQuota para controlar quién puede unir equipos al dominio."
-      },
-      {
-        id: 8, tema: "Active Directory",
-        enunciado: "¿Para qué sirve principalmente una Unidad Organizativa (OU)?",
-        opciones: {
-          A: "Organizar objetos y delegar administración/aplicar GPO",
-          B: "Asignar direcciones MAC",
-          C: "Cambiar el cableado de red",
-          D: "Reemplazar el DNS"
-        },
-        correcta: "A",
-        explicacion: "Las OU (Organizational Units) organizan objetos AD (usuarios, equipos, grupos) en contenedores jerárquicos. Permiten delegar la administración a diferentes administradores y aplicar GPO específicas."
-      },
-      {
-        id: 9, tema: "Administración Remota",
-        enunciado: "En administración remota, ¿qué comando se usa para habilitar la ejecución de cmdlets remotos (RSAT/PowerShell)?",
-        opciones: {
-          A: "Enable-PSRemoting",
-          B: "Disable-NetAdapter",
-          C: "Stop-Service dhcp",
-          D: "ipconfig /release"
-        },
-        correcta: "A",
-        explicacion: "Enable-PSRemoting configura el servidor para aceptar comandos PowerShell remotos (WS-Management/WinRM). Permite usar Invoke-Command y Enter-PSSession para administración remota."
-      },
-      {
-        id: 10, tema: "Active Directory",
-        enunciado: "En el archivo de base de datos de AD, el atributo 'dn' se refiere a…",
-        opciones: {
-          A: "Distinguished Name (nombre distinguido) del objeto",
-          B: "Domain Name del servidor",
-          C: "Device Number del disco",
-          D: "Digital Noise"
-        },
-        correcta: "A",
-        explicacion: "El DN (Distinguished Name) identifica de forma única un objeto en el directorio LDAP. Ejemplo: CN=Juan,OU=Marketing,DC=empresa,DC=com. Cada componente describe la ubicación del objeto en el árbol."
-      },
-      {
-        id: 11, tema: "Active Directory",
-        enunciado: "Según Unit 6, un dominio representa…",
-        opciones: {
-          A: "un límite de seguridad donde se definen los usuarios",
-          B: "una VLAN de capa 2",
-          C: "un tipo de cableado",
-          D: "un algoritmo de compresión"
-        },
-        correcta: "A",
-        explicacion: "Un dominio AD es la unidad fundamental de organización y límite de seguridad. Contiene una base de datos de objetos (usuarios, equipos, políticas) compartida por todos los DC del dominio."
-      },
-      {
-        id: 12, tema: "Active Directory",
-        enunciado: "En un dominio, se requiere al menos un Domain Controller, pero se recomienda tener más de uno para…",
-        opciones: {
-          A: "redundancia/tolerancia a fallos",
-          B: "evitar el uso de DNS",
-          C: "reducir el ancho de banda de Manchester",
-          D: "eliminar el firewall"
-        },
-        correcta: "A",
-        explicacion: "Tener múltiples DC proporciona alta disponibilidad: si uno falla, los otros siguen respondiendo peticiones de autenticación y acceso. También distribuye la carga de trabajo en entornos grandes."
-      },
-      {
-        id: 13, tema: "Tipos de Redes",
-        enunciado: "Una red informática se define como…",
-        opciones: {
-          A: "un conjunto de dispositivos conectados para compartir información y recursos",
-          B: "una base de datos de usuarios",
-          C: "un disco dinámico",
-          D: "un sistema de archivos"
-        },
-        correcta: "A",
-        explicacion: "Una red informática es un conjunto de dispositivos (ordenadores, servidores, impresoras, etc.) interconectados mediante hardware y software para compartir información, recursos y servicios."
-      },
-      {
-        id: 14, tema: "Modelos de Red",
-        enunciado: "En un modelo servidor-cliente, ¿qué opción describe mejor la relación entre roles?",
-        opciones: {
-          A: "El cliente solicita servicios/recursos y el servidor responde",
-          B: "Todos los nodos son iguales siempre",
-          C: "No existen permisos ni autenticación",
-          D: "Solo funciona con Wi-Fi"
-        },
-        correcta: "A",
-        explicacion: "En el modelo cliente-servidor, los clientes hacen peticiones de servicios/recursos y los servidores los proporcionan. Es asimétrico: el servidor espera peticiones y el cliente las inicia."
-      },
-      {
-        id: 15, tema: "Modelo OSI",
-        enunciado: "En el modelo OSI, ¿qué capa se encarga principalmente del encaminamiento y direccionamiento IP?",
-        opciones: {
-          A: "Capa de Red",
-          B: "Capa Física",
-          C: "Capa de Presentación",
-          D: "Capa de Sesión"
-        },
-        correcta: "A",
-        explicacion: "La capa 3 (Red) del modelo OSI gestiona el direccionamiento lógico (IP) y el encaminamiento (routing) de paquetes entre diferentes redes. Los routers operan en esta capa."
-      },
-      {
-        id: 16, tema: "Protocolos de Red",
-        enunciado: "¿Para qué se usa ARP?",
-        opciones: {
-          A: "Resolver una IP a una dirección MAC en la red local",
-          B: "Cifrar la comunicación SSH",
-          C: "Asignar puertos TCP",
-          D: "Actualizar el kernel"
-        },
-        correcta: "A",
-        explicacion: "ARP (Address Resolution Protocol) resuelve direcciones IP a direcciones MAC en la misma red local (LAN). Un equipo envía un broadcast preguntando '¿Quién tiene la IP X?' y el dueño responde con su MAC."
-      },
-      {
-        id: 17, tema: "Enrutamiento",
-        enunciado: "¿Qué algoritmo se usa típicamente para calcular rutas de menor coste en enrutamiento dinámico (según el material)?",
-        opciones: { A: "Dijkstra", B: "RSA", C: "AES", D: "LZW" },
-        correcta: "A",
-        explicacion: "El algoritmo de Dijkstra calcula el camino más corto desde un nodo a todos los demás en un grafo ponderado. Se usa en protocolos de estado de enlace como OSPF para calcular la tabla de enrutamiento."
-      },
-      {
-        id: 18, tema: "Perturbaciones",
-        enunciado: "La intermodulación es una perturbación debida a…",
-        opciones: {
-          A: "la mezcla de otras frecuencias en el canal",
-          B: "la falta de routers en la red",
-          C: "el uso de TCP en vez de UDP",
-          D: "la compresión JPEG"
-        },
-        correcta: "A",
-        explicacion: "La intermodulación ocurre cuando señales de diferentes frecuencias se mezclan en un medio no lineal, generando frecuencias espurias (suma y diferencia de frecuencias) que interfieren con la señal original."
-      },
-      {
-        id: 19, tema: "Linux",
-        enunciado: "Bash es…",
-        opciones: {
-          A: "un lenguaje de scripting/CLI típico en Unix/Linux para automatizar tareas",
-          B: "un estándar IEEE de Wi-Fi",
-          C: "un tipo de malware",
-          D: "un protocolo de capa física"
-        },
-        correcta: "A",
-        explicacion: "Bash (Bourne Again SHell) es el intérprete de comandos y lenguaje de scripting más usado en sistemas Unix/Linux. Permite automatizar tareas mediante scripts, gestionar el sistema y ejecutar programas."
-      },
-      {
-        id: 20, tema: "Tipos de Ataques",
-        enunciado: "Un ataque 0-Day es…",
-        opciones: {
-          A: "un ataque que explota una vulnerabilidad desconocida o sin parche",
-          B: "un ataque que solo dura 24 horas",
-          C: "un tipo de backup",
-          D: "un antivirus"
-        },
-        correcta: "A",
-        explicacion: "Un ataque Zero-Day (0-day) explota una vulnerabilidad que aún no es conocida públicamente ni tiene parche disponible. Es especialmente peligroso porque los sistemas no tienen defensa frente a él."
-      },
-      {
-        id: 21, tema: "Codificación de Señales",
-        enunciado: "Una desventaja clásica de la codificación Manchester es que…",
-        opciones: {
-          A: "requiere aproximadamente el doble de ancho de banda que NRZ",
-          B: "no tiene transiciones nunca",
-          C: "solo funciona con señales analógicas",
-          D: "impide la sincronización"
-        },
-        correcta: "A",
-        explicacion: "Manchester tiene una transición por cada bit (en el centro), lo que duplica la tasa de transiciones respecto a NRZ. Esto requiere aproximadamente el doble de ancho de banda para la misma tasa de bits."
-      },
-      {
-        id: 22, tema: "Codificación de Señales",
-        enunciado: "La codificación Diferencial Manchester es más robusta porque…",
-        opciones: {
-          A: "tolera mejor inversiones de polaridad",
-          B: "no requiere reloj",
-          C: "no usa transiciones centrales",
-          D: "elimina el ruido térmico"
-        },
-        correcta: "A",
-        explicacion: "Manchester Diferencial usa la presencia/ausencia de transición al inicio del bit (no el nivel absoluto) para codificar datos. Esto la hace robusta frente a inversiones de polaridad del cable."
-      },
-      {
-        id: 23, tema: "Codificación de Señales",
-        enunciado: "En NRZ-L, los bits se representan mediante…",
-        opciones: {
-          A: "niveles de voltaje constantes (0 y 1 en niveles diferentes)",
-          B: "una transición fija a mitad de bit",
-          C: "alternancia +V/-V en cada 1",
-          D: "4 bits convertidos en 5 bits"
-        },
-        correcta: "A",
-        explicacion: "NRZ-L (Non-Return to Zero Level): el nivel de voltaje permanece constante durante cada bit. Nivel alto = 1 (o 0, según convención), nivel bajo = 0. Simple pero problemático con largas secuencias iguales."
-      },
-      {
-        id: 24, tema: "Codificación de Señales",
-        enunciado: "Una secuencia larga de ceros es problemática en NRZ-L porque…",
-        opciones: {
-          A: "no hay transiciones y el receptor pierde sincronización",
-          B: "consume el doble de ancho de banda",
-          C: "provoca paridad distribuida",
-          D: "activa el modo DHCP"
-        },
-        correcta: "A",
-        explicacion: "En NRZ-L, una larga secuencia de ceros produce un nivel constante sin transiciones. El receptor necesita transiciones para sincronizar su reloj con el transmisor; sin ellas, puede perder la sincronización."
-      },
-      {
-        id: 25, tema: "Codificación de Señales",
-        enunciado: "Dada la señal NRZ-L: ↑ ↑ ↓ ↑ ↑ ↓ (asumiendo ↑=1 y ↓=0), la secuencia de bits es…",
-        opciones: { A: "110110", B: "111000", C: "001101", D: "101011" },
-        correcta: "A",
-        explicacion: "Con ↑=1 y ↓=0: ↑↑↓↑↑↓ = 1,1,0,1,1,0 = 110110. En NRZ-L cada símbolo corresponde directamente a un nivel de voltaje constante, por lo que la lectura es directa."
-      },
-      {
-        id: 26, tema: "Codificación de Señales",
-        enunciado: "Según el ejercicio del temario, la codificación Manchester de 10101 es…",
-        opciones: {
-          A: "↑↓  ↓↑  ↑↓  ↓↑  ↑↓",
-          B: "↓↑  ↓↑  ↑↓  ↑↓  ↓↑",
-          C: "↑↑  ↓↓  ↑↑  ↓↓  ↑↑",
-          D: "→→  ↑↓  →→  ↑↓  →→"
-        },
-        correcta: "A",
-        explicacion: "Manchester: bit 1 = transición bajo→alto (↑↓ en primera mitad alto → segunda mitad bajo... depende convención). Según el temario: 1=↑↓, 0=↓↑. Para 10101: ↑↓ ↓↑ ↑↓ ↓↑ ↑↓."
-      },
-      {
-        id: 27, tema: "Datagramas IPv4",
-        enunciado: "¿Qué campo del encabezado IPv4 limita la vida del paquete y evita bucles infinitos?",
-        opciones: { A: "TTL", B: "IHL", C: "MAC", D: "MTU" },
-        correcta: "A",
-        explicacion: "TTL (Time To Live): cada router decrementa este campo en 1 al reenviar el paquete. Cuando llega a 0, el router descarta el paquete y envía un ICMP Time Exceeded al origen, evitando bucles infinitos."
-      },
-      {
-        id: 28, tema: "Datagramas IPv4",
-        enunciado: "En un datagrama con campo 'Total Length' = 0x0028, la longitud total es…",
-        opciones: { A: "40 bytes", B: "28 bytes", C: "64 bytes", D: "20 bytes" },
-        correcta: "A",
-        explicacion: "0x0028 en hexadecimal: 2×16 + 8 = 32 + 8 = 40 bytes. El campo Total Length indica el tamaño completo del datagrama IP (cabecera + datos) en bytes."
-      },
-      {
-        id: 29, tema: "Datagramas IPv4",
-        enunciado: "El valor hexadecimal 0a00 0005 corresponde a la IP…",
-        opciones: {
-          A: "10.0.0.5",
-          B: "0.10.0.5",
-          C: "10.0.0.50",
-          D: "192.168.0.5"
-        },
-        correcta: "A",
-        explicacion: "0x0a = 10, 0x00 = 0, 0x00 = 0, 0x05 = 5. Por tanto 0x0a000005 = 10.0.0.5. Las direcciones IPv4 en el encabezado se representan como 4 octetos hexadecimales consecutivos."
-      },
-      {
-        id: 30, tema: "Puertos y Protocolos",
-        enunciado: "En el ejemplo del temario, el puerto 1f90 (hex) corresponde a…",
-        opciones: { A: "8080", B: "80", C: "53", D: "443" },
-        correcta: "A",
-        explicacion: "0x1f90 en decimal: 1×16³ + 15×16² + 9×16 + 0 = 4096 + 3840 + 144 + 0 = 8080. El puerto 8080 es frecuentemente usado como alternativa al puerto 80 para servidores HTTP proxy/de desarrollo."
-      },
-      {
-        id: 31, tema: "TCP",
-        enunciado: "Un segmento TCP con flag SYN y número de ACK = 0 suele indicar…",
-        opciones: {
-          A: "inicio del establecimiento de conexión",
-          B: "cierre de conexión (FIN)",
-          C: "paquete con datos de aplicación",
-          D: "ataque de ransomware"
-        },
-        correcta: "A",
-        explicacion: "El primer segmento del 3-way handshake TCP tiene SYN=1 y ACK=0 (no hay nada que confirmar aún). El cliente envía este SYN para iniciar la conexión con un número de secuencia aleatorio."
-      },
-      {
-        id: 32, tema: "Autenticación",
-        enunciado: "MFA significa…",
-        opciones: {
-          A: "Autenticación multifactor",
-          B: "Máxima frecuencia de acceso",
-          C: "Matriz de fallos y ataques",
-          D: "Monitorización de ficheros de AD"
-        },
-        correcta: "A",
-        explicacion: "MFA (Multi-Factor Authentication) requiere dos o más factores de autenticación: algo que sabes (contraseña), algo que tienes (token/móvil) y/o algo que eres (biometría). Aumenta significativamente la seguridad."
-      },
-      {
-        id: 33, tema: "Copias de Seguridad",
-        enunciado: "La estrategia de copias de seguridad 3-2-1 consiste en…",
-        opciones: {
-          A: "3 copias, 2 soportes distintos, 1 copia fuera de línea o fuera de la sede",
-          B: "3 discos dinámicos, 2 RAID, 1 servidor",
-          C: "3 contraseñas, 2 usuarios, 1 administrador",
-          D: "3 VLAN, 2 switches, 1 router"
-        },
-        correcta: "A",
-        explicacion: "La regla 3-2-1 de backups: mantener 3 copias de los datos, en 2 tipos diferentes de medios/soportes, con al menos 1 copia offsite (fuera de las instalaciones). Protege contra múltiples escenarios de fallo."
-      },
-      {
-        id: 34, tema: "Ingeniería Social",
-        enunciado: "Un deepfake se refiere a…",
-        opciones: {
-          A: "contenido (audio/vídeo/imagen) generado o manipulado con IA para suplantar identidad",
-          B: "un tipo de compresión sin pérdidas",
-          C: "una topología en anillo",
-          D: "un protocolo de cifrado Wi-Fi"
-        },
-        correcta: "A",
-        explicacion: "Los deepfakes usan IA (principalmente redes generativas adversariales/GAN) para crear vídeos, imágenes o audios hiperrealistas que muestran a personas diciendo o haciendo cosas que nunca ocurrieron."
-      },
-      {
-        id: 35, tema: "OSINT",
-        enunciado: "OSINT significa…",
-        opciones: {
-          A: "Open Source Intelligence (inteligencia de fuentes abiertas)",
-          B: "Operating System Internal Network Tools",
-          C: "Optical Signal Noise Interference Test",
-          D: "Open Secure Internet Node Transfer"
-        },
-        correcta: "A",
-        explicacion: "OSINT es la recopilación y análisis de información de fuentes públicamente disponibles (redes sociales, webs, registros públicos, etc.) para inteligencia. Se usa tanto en ciberseguridad ofensiva como defensiva."
-      },
-      {
-        id: 36, tema: "Seguridad Ofensiva",
-        enunciado: "Un ejercicio de red teaming consiste en…",
-        opciones: {
-          A: "simular ataques realistas para evaluar defensas y respuesta",
-          B: "instalar parches de Windows",
-          C: "configurar NRZ-I",
-          D: "crear una LAN doméstica"
-        },
-        correcta: "A",
-        explicacion: "Red Teaming es un ejercicio donde un equipo ofensivo (red team) simula ataques reales de adversarios sofisticados para probar las defensas y la capacidad de respuesta del equipo defensor (blue team)."
-      },
-      {
-        id: 37, tema: "Informes de Seguridad",
-        enunciado: "Un informe ejecutivo de seguridad suele estar orientado a…",
-        opciones: {
-          A: "dirección/gestión y resumen de impacto/riesgos",
-          B: "solo a configurar firewall",
-          C: "solo a explicar codificación Manchester",
-          D: "solo a listar puertos TCP"
-        },
-        correcta: "A",
-        explicacion: "El informe ejecutivo resume los hallazgos de seguridad en términos de impacto de negocio y riesgos, orientado a directivos y responsables. No entra en detalles técnicos profundos como haría un informe técnico."
-      },
-      {
-        id: 38, tema: "Arquitectura de Red",
-        enunciado: "La segmentación de red ayuda principalmente a…",
-        opciones: {
-          A: "evitar movimientos laterales y contener una intrusión",
-          B: "aumentar el ancho de banda de RZ",
-          C: "evitar el uso de DNS",
-          D: "hacer que ARP deje de existir"
-        },
-        correcta: "A",
-        explicacion: "La segmentación de red (VLANs, subredes, DMZ) limita la propagación de un ataque. Si un segmento se compromete, el atacante no puede moverse fácilmente a otros segmentos (movimiento lateral)."
-      },
-      {
-        id: 39, tema: "SIEM",
-        enunciado: "¿Cuál de los siguientes componentes pertenece al stack ELK?",
-        opciones: { A: "Kibana", B: "Nessus", C: "BitLocker", D: "Token Ring" },
-        correcta: "A",
-        explicacion: "ELK Stack: Elasticsearch (motor de búsqueda/análisis), Logstash (recopilación/procesado de logs) y Kibana (visualización de datos en dashboards). Es una plataforma popular para análisis de logs y SIEM."
-      },
-      {
-        id: 40, tema: "SIEM",
-        enunciado: "En un SIEM, la correlación de eventos sirve para…",
-        opciones: {
-          A: "detectar patrones/ataques combinando logs de varias fuentes",
-          B: "cambiar el sistema de archivos a ReFS",
-          C: "codificar bits en AMI",
-          D: "reiniciar un DC automáticamente"
-        },
-        correcta: "A",
-        explicacion: "La correlación de eventos en un SIEM analiza logs de múltiples fuentes (firewall, IDS, servidores, endpoints) buscando patrones que indiquen un ataque, como múltiples fallos de login seguidos de acceso exitoso."
+        id: 36, tema: "Redes – IPv4",
+        enunciado: "El valor hexadecimal 0x45 al inicio de un datagrama IPv4 indica:",
+        opciones: { A: "IPv6 con cabecera extendida", B: "IPv4 con cabecera estándar de 20 bytes (IHL=5)", C: "UDP en puerto 45", D: "TTL máximo" },
+        correcta: "B",
+        explicacion: "0x45: el nibble '4' indica IPv4 y el nibble '5' es el IHL (Internet Header Length) = 5 × 4 bytes = 20 bytes, que es el tamaño mínimo/estándar de la cabecera IPv4 sin opciones."
+      },
+      {
+        id: 37, tema: "SOR – RAID",
+        enunciado: "RAID1 (mirroring) proporciona:",
+        opciones: { A: "Mayor velocidad sin redundancia", B: "Copia exacta en dos discos (tolerancia a fallo)", C: "Paridad distribuida en 3 discos", D: "Compresión de datos" },
+        correcta: "B",
+        explicacion: "RAID1 duplica exactamente los datos en dos discos simultáneamente. Si uno falla, el otro contiene una copia completa. Ofrece buena tolerancia a fallos pero usa el 50% del espacio total."
+      },
+      {
+        id: 38, tema: "Seguridad – Ingeniería Social",
+        enunciado: "El tailgating es:",
+        opciones: { A: "Un ataque de red", B: "Acceder a zona restringida siguiendo a alguien autorizado", C: "Un tipo de phishing", D: "Un escaneo de puertos" },
+        correcta: "B",
+        explicacion: "Tailgating (piggybacking) es una técnica de ingeniería social de seguridad física: el atacante accede a una zona restringida aprovechando que alguien autorizado mantiene la puerta abierta."
+      },
+      {
+        id: 39, tema: "SOR – Autenticación",
+        enunciado: "Kerberos es el protocolo de autenticación principal en AD porque:",
+        opciones: { A: "Solo usa contraseñas", B: "Usa tickets temporales evitando transmitir contraseñas por la red", C: "Funciona sin DC", D: "Solo funciona en redes WiFi" },
+        correcta: "B",
+        explicacion: "Kerberos autentica usando tickets temporales (TGT y tickets de servicio). Las contraseñas nunca viajan por la red; en su lugar se usa criptografía de clave compartida para verificar la identidad."
+      },
+      {
+        id: 40, tema: "Redes – Modelo OSI",
+        enunciado: "HTTP, FTP y SMTP son protocolos de la capa:",
+        opciones: { A: "Transporte", B: "Red", C: "Aplicación", D: "Sesión" },
+        correcta: "C",
+        explicacion: "HTTP (web), FTP (transferencia de archivos) y SMTP (correo) son protocolos de la capa 7 (Aplicación) del modelo OSI. Son los protocolos con los que interactúan directamente las aplicaciones del usuario."
       }
     ]
   }
 };
 
-// Validation
+// ── Validación automática al cargar ──
 (function validateTests() {
-  const required = ['id','tema','enunciado','opciones','correcta','explicacion'];
-  const validAnswers = ['A','B','C','D'];
-  Object.entries(TESTS_DATA).forEach(([testKey, test]) => {
-    test.questions.forEach((q, idx) => {
-      required.forEach(field => {
-        if (q[field] === undefined || q[field] === null) {
-          console.error(`[${testKey}] Q${idx+1} (id=${q.id}): Missing field '${field}'`);
-        }
+  const required = ['id', 'tema', 'enunciado', 'opciones', 'correcta', 'explicacion'];
+  const valid = ['A', 'B', 'C', 'D'];
+  Object.entries(TESTS_DATA).forEach(([key, test]) => {
+    test.questions.forEach((q, i) => {
+      required.forEach(f => {
+        if (q[f] === undefined || q[f] === null)
+          console.error(`[${key}] Q${i + 1} id=${q.id}: falta campo '${f}'`);
       });
-      if (!validAnswers.includes(q.correcta)) {
-        console.error(`[${testKey}] Q${idx+1} (id=${q.id}): Invalid 'correcta' value: '${q.correcta}'`);
-      }
-      const opts = q.opciones || {};
-      validAnswers.forEach(opt => {
-        if (!opts[opt]) {
-          console.error(`[${testKey}] Q${idx+1} (id=${q.id}): Missing option '${opt}'`);
-        }
+      if (!valid.includes(q.correcta))
+        console.error(`[${key}] Q${i + 1} id=${q.id}: 'correcta' inválida: '${q.correcta}'`);
+      valid.forEach(l => {
+        if (!q.opciones?.[l])
+          console.error(`[${key}] Q${i + 1} id=${q.id}: falta opción '${l}'`);
       });
     });
-    console.log(`✓ ${testKey}: ${test.questions.length} questions validated`);
+    console.log(`✓ ${key} (${test.title}): ${test.questions.length} preguntas validadas`);
   });
 })();
