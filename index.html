@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz App — SOR Redes & Seguridad</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ═══════════════════════════════
+       SCREEN 1: MENÚ
+  ════════════════════════════════ -->
+  <div id="menu-screen" class="screen">
+    <div class="menu-wrapper">
+
+      <div class="brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          <span>QuizLab</span>
+        </div>
+        <h1>Redes &amp; Seguridad</h1>
+        <p>Sistemas operativos en red · 40 preguntas por test</p>
+      </div>
+
+      <!-- Test Cards -->
+      <div class="test-grid">
+        <button class="test-card" data-test="test1" tabindex="0">
+          <span class="num">1</span>
+          <h3>Test 1</h3>
+          <p>NTFS · AD · OSI · Codificación · TCP/IP · Seguridad</p>
+        </button>
+        <button class="test-card" data-test="test2" tabindex="0">
+          <span class="num">2</span>
+          <h3>Test 2</h3>
+          <p>AD DS · RODC · Modulación · CSMA · Malware · RBAC</p>
+        </button>
+        <button class="test-card" data-test="test3" tabindex="0">
+          <span class="num">3</span>
+          <h3>Test 3</h3>
+          <p>ReFS · RAID · Enrutamiento · NRZ · IPv4 · SIEM</p>
+        </button>
+      </div>
+
+      <!-- Options Toggles -->
+      <div class="options-bar">
+        <label class="toggle-group" id="toggle-shuffle">
+          <span>🔀 Aleatorio</span>
+          <div class="toggle"></div>
+        </label>
+        <label class="toggle-group" id="toggle-timer">
+          <span>⏱ Temporizador</span>
+          <div class="toggle"></div>
+        </label>
+        <label class="toggle-group" id="toggle-autocorrect">
+          <span>⚡ Autocorrección</span>
+          <div class="toggle"></div>
+        </label>
+      </div>
+
+      <!-- Topic Filter -->
+      <div class="topic-filter">
+        <label for="topic-filter-select">Filtrar por tema</label>
+        <select id="topic-filter-select">
+          <option value="all">Todos los temas</option>
+        </select>
+      </div>
+
+      <p class="keyboard-hint" style="margin-top:1.5rem;">
+        Atajos de teclado en el test:
+        <kbd class="kbd">1–4</kbd> elegir opción ·
+        <kbd class="kbd">Enter</kbd> comprobar/siguiente ·
+        <kbd class="kbd">R</kbd> marcar ·
+        <kbd class="kbd">←</kbd><kbd class="kbd">→</kbd> navegar
+      </p>
+
+    </div>
+  </div><!-- /menu-screen -->
+
+
+  <!-- ═══════════════════════════════
+       SCREEN 2: QUIZ
+  ════════════════════════════════ -->
+  <div id="quiz-screen" class="screen">
+    <div class="quiz-wrapper">
+
+      <!-- Top Bar -->
+      <div class="quiz-topbar">
+        <div style="display:flex;align-items:center;gap:.75rem;">
+          <button class="btn btn-ghost btn-sm" id="menu-btn-quiz" title="Volver al menú">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <polyline points="15 18 9 12 15 6"/><line x1="9" y1="12" x2="3" y2="12"/>
+            </svg>
+            Menú
+          </button>
+          <div>
+            <div class="quiz-progress-label" id="quiz-test-title">Test</div>
+            <div class="quiz-progress-count">
+              P <span id="q-current">1</span>/<span id="q-total">40</span>
+            </div>
+          </div>
+        </div>
+        <div class="quiz-timer hidden" id="quiz-timer">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="10" cy="11" r="7"/><polyline points="10 7 10 11 13 13"/>
+            <path d="M8 2h4"/>
+          </svg>
+          <span id="timer-display">00:00</span>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+
+      <!-- Question Card -->
+      <div class="question-card">
+        <div class="question-meta">
+          <span class="question-badge" id="q-badge">P1</span>
+          <span class="question-tema" id="q-tema">Tema</span>
+          <button class="question-bookmark" id="bookmark-btn" title="Marcar para revisar (R)">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 3h10a1 1 0 0 1 1 1v13l-6-3-6 3V4a1 1 0 0 1 1-1z"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="question-text" id="q-text">Cargando pregunta...</div>
+
+        <div class="options-list" id="options-list"></div>
+
+        <div class="feedback-box hidden" id="feedback-box"></div>
+      </div><!-- /question-card -->
+
+      <!-- Action Buttons -->
+      <div class="quiz-actions">
+        <div class="actions-left">
+          <button class="btn btn-secondary btn-sm" id="prev-btn" disabled>
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="13 16 7 10 13 4"/></svg>
+            Anterior
+          </button>
+          <button class="btn btn-secondary btn-sm" id="restart-quiz-btn" title="Reiniciar test">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <polyline points="1 4 1 10 7 10"/>
+              <path d="M3.51 15a9 9 0 1 0 .49-5"/>
+            </svg>
+            Reiniciar
+          </button>
+        </div>
+        <div class="actions-right">
+          <button class="btn btn-check" id="check-btn" disabled>
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="4 10 8 14 16 6"/></svg>
+            Comprobar
+          </button>
+          <button class="btn btn-ghost btn-sm" id="summary-btn" title="Ver resumen / Finalizar">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="14" height="14" rx="2"/><line x1="7" y1="8" x2="13" y2="8"/><line x1="7" y1="12" x2="11" y2="12"/></svg>
+            Finalizar
+          </button>
+          <button class="btn btn-primary" id="next-btn">
+            Siguiente
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="7 4 13 10 7 16"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Nav Dots -->
+      <div class="nav-dots-wrap">
+        <div class="nav-dots-label">Mapa de preguntas</div>
+        <div class="nav-dots" id="nav-dots"></div>
+      </div>
+
+      <div class="keyboard-hint">
+        <kbd class="kbd">1</kbd><kbd class="kbd">2</kbd><kbd class="kbd">3</kbd><kbd class="kbd">4</kbd> elegir ·
+        <kbd class="kbd">Enter</kbd> comprobar/siguiente ·
+        <kbd class="kbd">R</kbd> marcar ·
+        <kbd class="kbd">←</kbd><kbd class="kbd">→</kbd> navegar
+      </div>
+
+    </div>
+  </div><!-- /quiz-screen -->
+
+
+  <!-- ═══════════════════════════════
+       SCREEN 3: RESULTADOS
+  ════════════════════════════════ -->
+  <div id="results-screen" class="screen">
+    <div class="results-wrapper">
+
+      <div class="results-header">
+        <span class="results-emoji" id="results-emoji">🎉</span>
+        <div class="results-title" id="results-title-text">¡Buen trabajo!</div>
+        <div class="results-subtitle" id="results-subtitle-text">Test completado</div>
+      </div>
+
+      <!-- Score Circle -->
+      <div class="score-circle-wrap">
+        <div class="score-circle" id="score-circle" style="--pct:0">
+          <div class="score-circle-inner">
+            <span class="score-pct" id="score-pct-val">0%</span>
+            <span class="score-label">Nota</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card accent">
+          <span class="stat-value" id="stat-nota">0</span>
+          <span class="stat-desc">Nota /10</span>
+        </div>
+        <div class="stat-card ok">
+          <span class="stat-value" id="stat-correct">0</span>
+          <span class="stat-desc">Aciertos</span>
+        </div>
+        <div class="stat-card err">
+          <span class="stat-value" id="stat-incorrect">0</span>
+          <span class="stat-desc">Errores</span>
+        </div>
+        <div class="stat-card warn">
+          <span class="stat-value" id="stat-blank">0</span>
+          <span class="stat-desc">En blanco</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value" id="stat-time">00:00</span>
+          <span class="stat-desc">Tiempo</span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="results-actions">
+        <button class="btn btn-primary" id="results-restart-btn">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <polyline points="1 4 1 10 7 10"/>
+            <path d="M3.51 15a9 9 0 1 0 .49-5"/>
+          </svg>
+          Repetir test
+        </button>
+        <button class="btn btn-secondary" id="results-menu-btn">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/>
+          </svg>
+          Menú principal
+        </button>
+      </div>
+
+      <!-- Review Section -->
+      <div class="review-section">
+        <h2>
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="7"/><line x1="10" y1="7" x2="10" y2="10"/><line x1="10" y1="13" x2="10.01" y2="13"/></svg>
+          Revisión detallada
+        </h2>
+        <div class="review-filters">
+          <button class="filter-btn active" data-filter="all">Todas</button>
+          <button class="filter-btn ok" data-filter="ok">✓ Correctas</button>
+          <button class="filter-btn err" data-filter="err">✗ Incorrectas</button>
+          <button class="filter-btn marked" data-filter="marked">🔖 Marcadas</button>
+        </div>
+        <div id="review-list"></div>
+      </div>
+
+    </div>
+  </div><!-- /results-screen -->
+
+</div><!-- /#app -->
+
+<!-- ══ Toast ══ -->
+<div id="toast"></div>
+
+<!-- ══ Modal ══ -->
+<div class="modal-overlay hidden" id="modal-overlay">
+  <div class="modal-box">
+    <h3 id="modal-title">Confirmar</h3>
+    <p id="modal-msg">¿Estás seguro?</p>
+    <div class="modal-actions" id="modal-actions"></div>
+  </div>
+</div>
+
+<!-- ══ Scripts ══ -->
+<script src="questions.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
