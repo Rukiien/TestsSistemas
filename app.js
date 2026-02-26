@@ -70,6 +70,30 @@ function toggleOption(opt) {
   }
 }
 
+/* ────────── SHUFFLE OPTIONS ────────── */
+// Barajamos las opciones A/B/C/D de cada pregunta y recalculamos
+// qué letra es la correcta. Devuelve una nueva pregunta con
+// opciones y 'correcta' actualizados, sin mutar el original.
+function shuffleQuestionOptions(q) {
+  const letters = ['A','B','C','D'];
+  // Crear array de {letter, text} y barajar
+  const entries = letters.map(l => ({ letter: l, text: q.opciones[l] }));
+  for (let i = entries.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [entries[i], entries[j]] = [entries[j], entries[i]];
+  }
+  // Reconstruir opciones con nuevas letras
+  const newOpciones = {};
+  let newCorrecta = '';
+  const originalCorrectText = q.opciones[q.correcta];
+  entries.forEach((entry, idx) => {
+    const newLetter = letters[idx];
+    newOpciones[newLetter] = entry.text;
+    if (entry.text === originalCorrectText) newCorrecta = newLetter;
+  });
+  return { ...q, opciones: newOpciones, correcta: newCorrecta };
+}
+
 /* ────────── START TEST ────────── */
 function startTest(testKey) {
   const testData = TESTS_DATA[testKey];
@@ -109,8 +133,12 @@ function initNewTest(testKey) {
     if (qs.length === 0) { toast('No hay preguntas para ese tema'); return; }
   }
 
-  // Shuffle
+  // Shuffle question order
   if (state.shuffled) qs = shuffle(qs);
+
+  // Always shuffle A/B/C/D options per question so the correct
+  // answer is not always in position A
+  qs = qs.map(shuffleQuestionOptions);
 
   state.questions = qs;
 
