@@ -1,5 +1,5 @@
 const TESTS_DATA = {
-  1: {
+  test1: {
     title: "Test 1 – Base de Conocimiento",
     questions: [
       {id:1, tema:"Redes", enunciado:"En el modelo OSI, la capa responsable del control de congestión y enrutamiento es:", opciones:{A:"Transporte",B:"Enlace",C:"Red",D:"Sesión"}, correcta:"C", explicacion:""},
@@ -44,7 +44,7 @@ const TESTS_DATA = {
       {id:40, tema:"SOR", enunciado:"La instalación remota requiere:", opciones:{A:"PXE habilitado",B:"Solo USB",C:"Bluetooth",D:"Solo ISO local"}, correcta:"A", explicacion:""}
     ]
   },
-  2: {
+  test2: {
     title: "Test 2 – Nivel Avanzado",
     questions: [
       {id:1, tema:"Redes", enunciado:"Un paquete viaja desde un cliente a un servidor web. ¿En qué capa OSI se realiza el enrutamiento?", opciones:{A:"Enlace",B:"Red",C:"Transporte",D:"Aplicación"}, correcta:"B", explicacion:""},
@@ -89,10 +89,10 @@ const TESTS_DATA = {
       {id:40, tema:"SOR", enunciado:"La estructura lógica de AD es independiente de:", opciones:{A:"Usuarios",B:"Topología física de red",C:"DNS",D:"GPO"}, correcta:"B", explicacion:""}
     ]
   },
-  3: {
+  test3: {
     title: "Test 3 – Examen Final",
     questions: [
-      {id:1, tema:"Redes/SOR", enunciado:"Un cliente puede hacer ping al DC pero no puede unirse al dominio. El problema más probable es:", opciones:{A:"Fallo de switch",B:"DNS mal configurado",C:"Cable roto",D:"RAID incorrecto"}, correcta:"B", explicacion:""},
+      {id:1, tema:"Redes", enunciado:"Un cliente puede hacer ping al DC pero no puede unirse al dominio. El problema más probable es:", opciones:{A:"Fallo de switch",B:"DNS mal configurado",C:"Cable roto",D:"RAID incorrecto"}, correcta:"B", explicacion:""},
       {id:2, tema:"Seguridad", enunciado:"En un ataque MITM, el atacante:", opciones:{A:"Satura el servidor",B:"Se posiciona entre cliente y servidor",C:"Modifica BIOS",D:"Instala RAID"}, correcta:"B", explicacion:""},
       {id:3, tema:"Redes", enunciado:"En el modelo OSI, TCP pertenece a la capa:", opciones:{A:"Red",B:"Transporte",C:"Enlace",D:"Aplicación"}, correcta:"B", explicacion:""},
       {id:4, tema:"Redes", enunciado:"IEEE 802.11 define estándares para:", opciones:{A:"Ethernet cableado",B:"Redes inalámbricas Wi-Fi",C:"Bluetooth clásico",D:"Enrutamiento IPv4"}, correcta:"B", explicacion:""},
@@ -135,21 +135,3 @@ const TESTS_DATA = {
     ]
   }
 };
-
-// Validación automática (mantenida)
-(function validateTests() {
-  const required = ['id', 'tema', 'enunciado', 'opciones', 'correcta'];
-  const valid = ['A','B','C','D'];
-  Object.entries(TESTS_DATA).forEach(([key, test]) => {
-    test.questions.forEach((q, i) => {
-      required.forEach(f => {
-        if (!q.hasOwnProperty(f)) console.error(`[${key}] Q${i+1}: falta ${f}`);
-      });
-      if (!valid.includes(q.correcta)) console.error(`[${key}] Q${i+1}: correcta inválida`);
-      valid.forEach(l => {
-        if (!q.opciones?.[l]) console.error(`[${key}] Q${i+1}: falta opción ${l}`);
-      });
-    });
-    console.log(`✓ ${key} (${test.title}): ${test.questions.length} preguntas OK`);
-  });
-})();
