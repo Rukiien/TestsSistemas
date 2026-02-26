@@ -9,475 +9,327 @@ const state = {
   currentTest: null,    // 'test1' | 'test2' | 'test3'
   questions: [],        // active question list (filtered/shuffled)
   currentIdx: 0,
-  answers: {},          // { qId: 'A'|'B'|'C'|'D'|null }
-  checked: {},          // { qId: true } — already verified
-  marked: {},           // { qId: true } — flagged for review
-  shuffled: false,
-  timerOn: false,
-  seconds: 0,
-  timerInterval: null,
-  filterTema: 'all',
-  autocorrect: false,   // autocorrect = check on option select
+  selected: null,
+  checked: false,
+  answers: {},          // { [q.id]: 'A'|'B'|'C'|'D' }
+  marked: {},           // { [q.id]: true }
+  opts: {
+    shuffle: false,
+    timer: false,
+    autocorrect: false,
+    topic: 'all'
+  },
+  timer: {
+    enabled: false,
+    startMs: 0,
+    elapsedMs: 0,
+    interval: null
+  }
 };
 
-/* ────────── DOM REFS ────────── */
-const $ = id => document.getElementById(id);
-const $$ = sel => document.querySelectorAll(sel);
+/* ────────── HELPERS ────────── */
+const $ = (id) => document.getElementById(id);
+const $$ = (sel) => document.querySelectorAll(sel);
 
-/* ────────── INIT ────────── */
-document.addEventListener('DOMContentLoaded', () => {
-  showScreen('menu-screen');
-  bindMenuEvents();
-  bindKeyboard();
-  loadFromStorage();
-});
+function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+function pad2(n){ return String(n).padStart(2,'0'); }
+function msToClock(ms){
+  const s = Math.floor(ms/1000);
+  const mm = Math.floor(s/60);
+  const ss = s % 60;
+  return `${pad2(mm)}:${pad2(ss)}`;
+}
+function deepClone(o){ return JSON.parse(JSON.stringify(o)); }
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
 
-/* ────────── SCREENS ────────── */
-function showScreen(id) {
+/* ────────── LOCAL STORAGE ────────── */
+const LS_KEY = 'quizlab-settings-v1';
+function loadSettings(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return;
+    const s = JSON.parse(raw);
+    if(typeof s.shuffle === 'boolean') state.opts.shuffle = s.shuffle;
+    if(typeof s.timer === 'boolean') state.opts.timer = s.timer;
+    if(typeof s.autocorrect === 'boolean') state.opts.autocorrect = s.autocorrect;
+  }catch(e){}
+}
+function saveSettings(){
+  localStorage.setItem(LS_KEY, JSON.stringify({
+    shuffle: state.opts.shuffle,
+    timer: state.opts.timer,
+    autocorrect: state.opts.autocorrect
+  }));
+}
+
+/* ────────── SCREEN ROUTING ────────── */
+function showScreen(id){
   $$('.screen').forEach(s => s.classList.remove('active'));
   $(id).classList.add('active');
 }
 
-/* ────────── MENU ────────── */
-function bindMenuEvents() {
-  // Test cards
-  $$('.test-card').forEach(card => {
-    card.addEventListener('click', () => startTest(card.dataset.test));
-    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') startTest(card.dataset.test); });
-  });
+/* ────────── ICONS ────────── */
+function iconChevron(){
+  return `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 8 10 12 14 8"/></svg>`;
+}
 
-  // Toggles
-  $('toggle-shuffle').addEventListener('click', () => toggleOption('shuffle'));
-  $('toggle-timer').addEventListener('click', () => toggleOption('timer'));
-  $('toggle-autocorrect').addEventListener('click', () => toggleOption('autocorrect'));
+/* ────────── MENU TOGGLES ────────── */
+function bindToggles(){
+  const tShuffle = $('toggle-shuffle');
+  const tTimer = $('toggle-timer');
+  const tAuto = $('toggle-autocorrect');
 
-  // Topic filter
-  $('topic-filter-select').addEventListener('change', e => {
-    state.filterTema = e.target.value;
+  const apply = () => {
+    tShuffle.classList.toggle('active', state.opts.shuffle);
+    tTimer.classList.toggle('active', state.opts.timer);
+    tAuto.classList.toggle('active', state.opts.autocorrect);
+    saveSettings();
+  };
+
+  tShuffle.addEventListener('click', () => { state.opts.shuffle = !state.opts.shuffle; apply(); });
+  tTimer.addEventListener('click', () => { state.opts.timer = !state.opts.timer; apply(); });
+  tAuto.addEventListener('click', () => { state.opts.autocorrect = !state.opts.autocorrect; apply(); });
+
+  apply();
+}
+
+/* ────────── TOPIC FILTER ────────── */
+function bindTopicFilter(){
+  const sel = $('topic-filter-select');
+  sel.addEventListener('change', () => {
+    state.opts.topic = sel.value;
   });
 }
 
-function toggleOption(opt) {
-  if (opt === 'shuffle') {
-    state.shuffled = !state.shuffled;
-    $('toggle-shuffle').querySelector('.toggle').classList.toggle('on', state.shuffled);
-  } else if (opt === 'timer') {
-    state.timerOn = !state.timerOn;
-    $('toggle-timer').querySelector('.toggle').classList.toggle('on', state.timerOn);
-  } else if (opt === 'autocorrect') {
-    state.autocorrect = !state.autocorrect;
-    $('toggle-autocorrect').querySelector('.toggle').classList.toggle('on', state.autocorrect);
-  }
-}
-
-/* ────────── SHUFFLE OPTIONS ────────── */
-// Barajamos las opciones A/B/C/D de cada pregunta y recalculamos
-// qué letra es la correcta. Devuelve una nueva pregunta con
-// opciones y 'correcta' actualizados, sin mutar el original.
-function shuffleQuestionOptions(q) {
-  const letters = ['A','B','C','D'];
-  // Crear array de {letter, text} y barajar
-  const entries = letters.map(l => ({ letter: l, text: q.opciones[l] }));
-  for (let i = entries.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [entries[i], entries[j]] = [entries[j], entries[i]];
-  }
-  // Reconstruir opciones con nuevas letras
-  const newOpciones = {};
-  let newCorrecta = '';
-  const originalCorrectText = q.opciones[q.correcta];
-  entries.forEach((entry, idx) => {
-    const newLetter = letters[idx];
-    newOpciones[newLetter] = entry.text;
-    if (entry.text === originalCorrectText) newCorrecta = newLetter;
-  });
-  return { ...q, opciones: newOpciones, correcta: newCorrecta };
-}
-
-/* ────────── START TEST ────────── */
-function startTest(testKey) {
+/* ────────── TEST START ────────── */
+function startTest(testKey){
   const testData = TESTS_DATA[testKey];
   if (!testData) return;
 
-  // Check for saved state
-  const saved = loadSavedState(testKey);
-  if (saved) {
-    showModal(
-      'Continuar test',
-      `Tienes un test en progreso (${countAnswered(saved.answers)} respuestas guardadas). ¿Deseas continuar?`,
-      [
-        { label: 'Continuar', cls: 'btn-primary', action: () => restoreState(saved) },
-        { label: 'Nuevo test', cls: 'btn-secondary', action: () => initNewTest(testKey) },
-        { label: 'Cancelar', cls: 'btn-ghost', action: null }
-      ]
-    );
-    return;
-  }
-  initNewTest(testKey);
-}
-
-function initNewTest(testKey) {
-  const testData = TESTS_DATA[testKey];
   state.currentTest = testKey;
-  state.answers = {};
-  state.checked = {};
-  state.marked = {};
   state.currentIdx = 0;
-  state.seconds = 0;
+  state.selected = null;
+  state.checked = false;
+  state.answers = {};
+  state.marked = {};
 
-  let qs = [...testData.questions];
+  // set title
+  $('quiz-test-title').textContent = testData.title;
+  $('q-total').textContent = testData.questions.length;
 
-  // Filter by tema
-  if (state.filterTema !== 'all') {
-    qs = qs.filter(q => q.tema === state.filterTema);
-    if (qs.length === 0) { toast('No hay preguntas para ese tema'); return; }
+  // build active question list
+  let qs = deepClone(testData.questions);
+
+  // topic filter
+  if (state.opts.topic && state.opts.topic !== 'all'){
+    qs = qs.filter(q => q.tema === state.opts.topic);
   }
+  // fallback: if filter makes empty, use all
+  if (!qs.length) qs = deepClone(testData.questions);
 
-  // Shuffle question order
-  if (state.shuffled) qs = shuffle(qs);
-
-  // Always shuffle A/B/C/D options per question so the correct
-  // answer is not always in position A
-  qs = qs.map(shuffleQuestionOptions);
+  // shuffle
+  if (state.opts.shuffle) qs = shuffle(qs);
 
   state.questions = qs;
+  $('q-total').textContent = qs.length;
 
-  // Populate topic filter
-  populateTopicFilter(testKey);
-
-  showScreen('quiz-screen');
-  $('quiz-test-title').textContent = testData.title;
-
-  startTimer();
-  renderQuestion();
-  renderNavDots();
-  saveToStorage();
-}
-
-function restoreState(saved) {
-  Object.assign(state, {
-    currentTest: saved.currentTest,
-    questions: saved.questions,
-    currentIdx: saved.currentIdx,
-    answers: saved.answers,
-    checked: saved.checked,
-    marked: saved.marked,
-    seconds: saved.seconds,
-    shuffled: saved.shuffled,
-    timerOn: saved.timerOn,
-    autocorrect: saved.autocorrect,
-  });
-  showScreen('quiz-screen');
-  startTimer();
-  renderQuestion();
-  renderNavDots();
-}
-
-/* ────────── TIMER ────────── */
-function startTimer() {
-  clearInterval(state.timerInterval);
-  if (!state.timerOn) {
-    $('quiz-timer').classList.add('hidden');
-    return;
+  // timer
+  state.timer.enabled = state.opts.timer;
+  if (state.timer.interval) clearInterval(state.timer.interval);
+  state.timer.elapsedMs = 0;
+  state.timer.startMs = performance.now();
+  $('quiz-timer').classList.toggle('hidden', !state.timer.enabled);
+  if (state.timer.enabled){
+    $('timer-display').textContent = '00:00';
+    state.timer.interval = setInterval(() => {
+      state.timer.elapsedMs = performance.now() - state.timer.startMs;
+      $('timer-display').textContent = msToClock(state.timer.elapsedMs);
+    }, 250);
   }
-  $('quiz-timer').classList.remove('hidden');
-  updateTimerDisplay();
-  state.timerInterval = setInterval(() => {
-    state.seconds++;
-    updateTimerDisplay();
-    if (state.seconds % 10 === 0) saveToStorage();
-  }, 1000);
+
+  showScreen('quiz-screen');
+  renderQuestion();
 }
 
-function stopTimer() { clearInterval(state.timerInterval); state.timerInterval = null; }
-
-function updateTimerDisplay() {
-  const m = Math.floor(state.seconds / 60).toString().padStart(2, '0');
-  const s = (state.seconds % 60).toString().padStart(2, '0');
-  $('timer-display').textContent = `${m}:${s}`;
+/* ────────── MENU BINDING ────────── */
+function bindMenuCards(){
+  $$('.test-card').forEach(card => {
+    card.addEventListener('click', () => {
+      startTest(card.dataset.test);
+    });
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        startTest(card.dataset.test);
+      }
+    });
+  });
 }
 
-function formatTime(sec) {
-  const m = Math.floor(sec / 60).toString().padStart(2, '0');
-  const s = (sec % 60).toString().padStart(2, '0');
-  return `${m}:${s}`;
-}
-
-/* ────────── RENDER QUESTION ────────── */
-function renderQuestion() {
+/* ────────── QUESTION RENDER ────────── */
+function renderQuestion(){
   const q = state.questions[state.currentIdx];
   if (!q) return;
 
-  const total = state.questions.length;
-  const idx = state.currentIdx;
-  const answered = countAnswered(state.answers);
-  const pct = Math.round((idx + 1) / total * 100);
-
-  // Progress
-  $('progress-fill').style.width = pct + '%';
-  $('q-current').textContent = idx + 1;
-  $('q-total').textContent = total;
-
-  // Question meta
-  $('q-badge').textContent = `P${idx + 1}`;
-  $('q-tema').textContent = q.tema;
+  $('q-current').textContent = state.currentIdx + 1;
+  $('q-topic').textContent = q.tema;
+  $('q-id').textContent = `#${q.id}`;
   $('q-text').textContent = q.enunciado;
 
-  // Bookmark
-  const bmk = $('bookmark-btn');
-  bmk.classList.toggle('marked', !!state.marked[q.id]);
+  // marked pill
+  $('q-marked').style.display = state.marked[q.id] ? 'inline-flex' : 'none';
 
-  // Options
-  const list = $('options-list');
-  list.innerHTML = '';
-  const isChecked = !!state.checked[q.id];
-  const userAns = state.answers[q.id];
+  // progress
+  const pct = ((state.currentIdx) / Math.max(1, state.questions.length)) * 100;
+  $('progress-fill').style.width = `${pct}%`;
 
-  ['A', 'B', 'C', 'D'].forEach((letter, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'option-btn';
+  // answers
+  const answersWrap = $('answers');
+  answersWrap.innerHTML = '';
+  state.selected = state.answers[q.id] || null;
+  state.checked = false;
+
+  // feedback reset
+  const fb = $('feedback');
+  fb.className = 'feedback';
+  fb.innerHTML = '<span class="muted">Selecciona una opción y pulsa “Comprobar”.</span>';
+
+  // buttons
+  $('prev-btn').disabled = state.currentIdx === 0;
+  $('next-btn').disabled = state.currentIdx === state.questions.length - 1;
+  $('check-btn').disabled = !state.selected;
+  $('check-btn').style.display = 'inline-flex';
+  $('next-btn').style.display = 'inline-flex';
+
+  // build options
+  const letters = ['A','B','C','D'];
+  letters.forEach(letter => {
+    const opt = q.opciones[letter];
+    const btn = document.createElement('div');
+    btn.className = 'answer';
     btn.dataset.letter = letter;
-    btn.setAttribute('tabindex', '0');
     btn.innerHTML = `
-      <span class="option-letter">${letter}</span>
-      <span class="option-text">${q.opciones[letter]}</span>
+      <span class="letter">${letter}</span>
+      <div class="txt">${opt}</div>
     `;
-    if (isChecked) {
-      btn.disabled = true;
-      if (letter === q.correcta) btn.classList.add('correct-reveal');
-      if (letter === userAns && userAns !== q.correcta) btn.classList.add('incorrect');
-      if (letter === userAns && userAns === q.correcta) btn.classList.add('correct');
-    } else {
-      if (letter === userAns) btn.classList.add('selected');
-      btn.addEventListener('click', () => selectOption(letter));
-    }
-    list.appendChild(btn);
+    if (state.selected === letter) btn.classList.add('selected');
+
+    btn.addEventListener('click', () => {
+      if (state.checked) return;
+      state.selected = letter;
+      state.answers[q.id] = letter;
+      // update UI selection
+      $$('.answer').forEach(a => a.classList.remove('selected'));
+      btn.classList.add('selected');
+      $('check-btn').disabled = false;
+    });
+
+    answersWrap.appendChild(btn);
   });
-
-  // Feedback
-  renderFeedback(q, isChecked, userAns);
-
-  // Check button
-  const checkBtn = $('check-btn');
-  if (isChecked) {
-    checkBtn.style.display = 'none';
-  } else {
-    checkBtn.style.display = '';
-    checkBtn.disabled = !userAns;
-  }
-
-  // Navigation buttons
-  $('prev-btn').disabled = idx === 0;
-  $('next-btn').textContent = idx === total - 1 ? 'Finalizar' : 'Siguiente';
-
-  // Nav dots
-  updateNavDots();
-}
-
-function renderFeedback(q, isChecked, userAns) {
-  const box = $('feedback-box');
-  if (!isChecked) { box.classList.add('hidden'); return; }
-  box.classList.remove('hidden');
-  if (userAns === q.correcta) {
-    box.className = 'feedback-box ok';
-    box.innerHTML = `
-      <div class="feedback-icon">${iconCheck()}</div>
-      <div class="feedback-content">
-        <div class="feedback-title">¡Correcto!</div>
-        <div class="feedback-text">${q.explicacion}</div>
-      </div>`;
-  } else if (!userAns) {
-    box.className = 'feedback-box err';
-    box.innerHTML = `
-      <div class="feedback-icon">${iconX()}</div>
-      <div class="feedback-content">
-        <div class="feedback-title">Sin respuesta</div>
-        <div class="feedback-text">La respuesta correcta era <strong>${q.correcta}) ${q.opciones[q.correcta]}</strong>. ${q.explicacion}</div>
-      </div>`;
-  } else {
-    box.className = 'feedback-box err';
-    box.innerHTML = `
-      <div class="feedback-icon">${iconX()}</div>
-      <div class="feedback-content">
-        <div class="feedback-title">Incorrecto</div>
-        <div class="feedback-text">La respuesta correcta era <strong>${q.correcta}) ${q.opciones[q.correcta]}</strong>. ${q.explicacion}</div>
-      </div>`;
-  }
-}
-
-/* ────────── OPTION SELECT ────────── */
-function selectOption(letter) {
-  const q = state.questions[state.currentIdx];
-  if (state.checked[q.id]) return;
-  state.answers[q.id] = letter;
-
-  // Update UI
-  $$('.option-btn').forEach(btn => {
-    btn.classList.remove('selected');
-    if (btn.dataset.letter === letter) btn.classList.add('selected');
-  });
-  $('check-btn').disabled = false;
-  updateNavDots();
-  saveToStorage();
-
-  // Autocorrect
-  if (state.autocorrect) checkAnswer();
 }
 
 /* ────────── CHECK ANSWER ────────── */
-function checkAnswer() {
+function checkAnswer(){
   const q = state.questions[state.currentIdx];
-  if (state.checked[q.id]) return;
-  state.checked[q.id] = true;
-  // Mark as blank if no answer
-  if (!state.answers[q.id]) state.answers[q.id] = null;
-  renderQuestion();
-  saveToStorage();
+  if (!q) return;
+  if (!state.selected) return;
+
+  state.checked = true;
+
+  const isOk = state.selected === q.correcta;
+
+  // mark UI
+  $$('.answer').forEach(a => {
+    const l = a.dataset.letter;
+    a.classList.remove('selected');
+    if (l === q.correcta) a.classList.add('correct');
+    if (l === state.selected && !isOk) a.classList.add('wrong');
+  });
+
+  // feedback
+  const fb = $('feedback');
+  fb.className = `feedback ${isOk ? 'ok' : 'err'}`;
+  fb.innerHTML = isOk
+    ? `✅ Correcto.`
+    : `❌ Incorrecto. <br/><span class="muted">Correcta: <b>${q.correcta})</b> ${q.opciones[q.correcta]}</span>`;
+
+  // show explanation if exists
+  if (q.explicacion && q.explicacion.trim()){
+    fb.innerHTML += `<div style="margin-top:.6rem;"><span class="muted">${q.explicacion}</span></div>`;
+  }
+
+  // autocorrect: if enabled, jump next
+  if (state.opts.autocorrect){
+    $('check-btn').style.display = 'none';
+    setTimeout(() => goNext(), 350);
+  }
 }
 
 /* ────────── NAVIGATION ────────── */
-function goNext() {
-  const total = state.questions.length;
-  if (state.currentIdx < total - 1) {
+function goNext(){
+  if (state.currentIdx < state.questions.length - 1){
     state.currentIdx++;
     renderQuestion();
-    scrollToTop();
   } else {
-    confirmFinish();
+    finishTest();
   }
 }
-
-function goPrev() {
-  if (state.currentIdx > 0) {
+function goPrev(){
+  if (state.currentIdx > 0){
     state.currentIdx--;
     renderQuestion();
-    scrollToTop();
   }
 }
-
-function goToQuestion(idx) {
-  state.currentIdx = idx;
-  renderQuestion();
-  scrollToTop();
-}
-
-function scrollToTop() {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function toggleMark() {
+function toggleMark(){
   const q = state.questions[state.currentIdx];
+  if (!q) return;
   state.marked[q.id] = !state.marked[q.id];
-  $('bookmark-btn').classList.toggle('marked', !!state.marked[q.id]);
-  updateNavDots();
-  toast(state.marked[q.id] ? '🔖 Marcada para revisar' : 'Marca eliminada');
-  saveToStorage();
-}
-
-/* ────────── NAV DOTS ────────── */
-function renderNavDots() {
-  const wrap = $('nav-dots');
-  wrap.innerHTML = '';
-  state.questions.forEach((q, idx) => {
-    const dot = document.createElement('button');
-    dot.className = 'nav-dot';
-    dot.title = `Pregunta ${idx + 1}`;
-    dot.textContent = idx + 1;
-    dot.dataset.idx = idx;
-    dot.addEventListener('click', () => goToQuestion(idx));
-    wrap.appendChild(dot);
-  });
-  updateNavDots();
-}
-
-function updateNavDots() {
-  $$('.nav-dot').forEach((dot, idx) => {
-    const q = state.questions[idx];
-    if (!q) return;
-    dot.className = 'nav-dot';
-    if (idx === state.currentIdx) dot.classList.add('current');
-    else if (state.checked[q.id]) {
-      const ans = state.answers[q.id];
-      dot.classList.add(ans === q.correcta ? 'correct' : 'incorrect');
-    } else if (state.answers[q.id]) dot.classList.add('answered');
-    if (state.marked[q.id]) dot.classList.add('marked');
-  });
-}
-
-/* ────────── FINISH ────────── */
-function confirmFinish() {
-  const unchecked = state.questions.filter(q => !state.checked[q.id]).length;
-  const msg = unchecked > 0
-    ? `Tienes ${unchecked} pregunta${unchecked > 1 ? 's' : ''} sin comprobar. ¿Deseas finalizarlo igualmente?`
-    : '¿Deseas ver los resultados finales?';
-  showModal('Finalizar test', msg, [
-    { label: 'Ver resultados', cls: 'btn-primary', action: showResults },
-    { label: 'Seguir respondiendo', cls: 'btn-ghost', action: null }
-  ]);
+  $('q-marked').style.display = state.marked[q.id] ? 'inline-flex' : 'none';
 }
 
 /* ────────── RESULTS ────────── */
-function showResults() {
-  stopTimer();
-  clearSavedState(state.currentTest);
-
-  // Force check all unchecked (mark blank)
-  state.questions.forEach(q => {
-    if (!state.checked[q.id]) {
-      state.checked[q.id] = true;
-      if (!state.answers[q.id]) state.answers[q.id] = null;
-    }
-  });
+function finishTest(){
+  if (state.timer.interval){
+    clearInterval(state.timer.interval);
+    state.timer.interval = null;
+  }
+  if (state.timer.enabled){
+    state.timer.elapsedMs = performance.now() - state.timer.startMs;
+  }
 
   const total = state.questions.length;
-  let correct = 0, incorrect = 0, blank = 0;
+  let ok = 0;
   state.questions.forEach(q => {
-    const ans = state.answers[q.id];
-    if (!ans) blank++;
-    else if (ans === q.correcta) correct++;
-    else incorrect++;
+    const a = state.answers[q.id];
+    if (a && a === q.correcta) ok++;
   });
+  const pct = total ? Math.round((ok/total)*100) : 0;
 
-  const pct = Math.round(correct / total * 100);
-  const nota = (correct / total * 10).toFixed(2);
-
-  // Emoji
-  const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '🎉' : pct >= 50 ? '📚' : '💪';
-
-  $('results-emoji').textContent = emoji;
-  $('results-title-text').textContent = pct >= 70 ? '¡Buen trabajo!' : 'Sigue practicando';
+  $('results-title-text').textContent = `Resultados`;
   $('results-subtitle-text').textContent = TESTS_DATA[state.currentTest].title;
 
-  // Score circle
-  const circle = $('score-circle');
-  circle.style.setProperty('--pct', pct);
-  $('score-pct-val').textContent = pct + '%';
-
-  // Stats
-  $('stat-nota').textContent = nota;
-  $('stat-correct').textContent = correct;
-  $('stat-incorrect').textContent = incorrect;
-  $('stat-blank').textContent = blank;
-  $('stat-time').textContent = formatTime(state.seconds);
-
-  // Build review
-  buildReview();
+  $('stat-score').textContent = `${pct}%`;
+  $('stat-score-sub').textContent = `${ok}/${total} correctas`;
+  $('stat-time').textContent = state.timer.enabled ? msToClock(state.timer.elapsedMs) : '—';
+  $('stat-marked').textContent = Object.values(state.marked).filter(Boolean).length;
 
   showScreen('results-screen');
+  populateReview('all');
+  setActiveChip('all');
 }
 
-/* ── Review ── */
-let reviewFilter = 'all';
-
-function buildReview(filter) {
-  filter = filter || reviewFilter;
-  reviewFilter = filter;
-
-  $$('.filter-btn').forEach(btn => {
-    btn.classList.remove('active');
-    if (btn.dataset.filter === filter) btn.classList.add('active');
-  });
-
+/* ────────── REVIEW LIST ────────── */
+function setActiveChip(filter){
+  $$('.chip').forEach(c => c.classList.toggle('active', c.dataset.filter === filter));
+}
+function populateReview(filter){
   const container = $('review-list');
   container.innerHTML = '';
 
@@ -578,181 +430,49 @@ function bindKeyboard() {
 
 function selectIfAvail(letter) {
   const q = state.questions[state.currentIdx];
-  if (!q || state.checked[q.id]) return;
-  selectOption(letter);
-}
+  if (!q) return;
+  if (state.checked) return;
+  state.selected = letter;
+  state.answers[q.id] = letter;
 
-/* ────────── MODAL ────────── */
-function showModal(title, msg, actions) {
-  const overlay = $('modal-overlay');
-  $('modal-title').textContent = title;
-  $('modal-msg').textContent = msg;
-  const actionsDiv = $('modal-actions');
-  actionsDiv.innerHTML = '';
-  actions.forEach(a => {
-    const btn = document.createElement('button');
-    btn.className = `btn ${a.cls}`;
-    btn.textContent = a.label;
-    btn.addEventListener('click', () => {
-      overlay.classList.add('hidden');
-      if (a.action) a.action();
-    });
-    actionsDiv.appendChild(btn);
+  $$('.answer').forEach(a => {
+    a.classList.toggle('selected', a.dataset.letter === letter);
   });
-  overlay.classList.remove('hidden');
+  $('check-btn').disabled = false;
 }
 
-/* ────────── TOAST ────────── */
-function toast(msg, dur = 2200) {
-  const t = $('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), dur);
-}
-
-/* ────────── LOCAL STORAGE ────────── */
-const LS_KEY = 'quizapp_state';
-
-function saveToStorage() {
-  const save = {
-    currentTest: state.currentTest,
-    questions: state.questions,
-    currentIdx: state.currentIdx,
-    answers: state.answers,
-    checked: state.checked,
-    marked: state.marked,
-    seconds: state.seconds,
-    shuffled: state.shuffled,
-    timerOn: state.timerOn,
-    autocorrect: state.autocorrect,
-  };
-  try {
-    localStorage.setItem(`${LS_KEY}_${state.currentTest}`, JSON.stringify(save));
-  } catch(e) {}
-}
-
-function loadSavedState(testKey) {
-  try {
-    const raw = localStorage.getItem(`${LS_KEY}_${testKey}`);
-    if (!raw) return null;
-    const data = JSON.parse(raw);
-    if (!data.questions || data.questions.length === 0) return null;
-    return data;
-  } catch(e) { return null; }
-}
-
-function clearSavedState(testKey) {
-  try { localStorage.removeItem(`${LS_KEY}_${testKey}`); } catch(e) {}
-}
-
-function loadFromStorage() {
-  // Restore toggle states from prefs
-  try {
-    const prefs = JSON.parse(localStorage.getItem(`${LS_KEY}_prefs`) || '{}');
-    if (prefs.shuffled) { state.shuffled = true; $('toggle-shuffle').querySelector('.toggle').classList.add('on'); }
-    if (prefs.timerOn) { state.timerOn = true; $('toggle-timer').querySelector('.toggle').classList.add('on'); }
-    if (prefs.autocorrect) { state.autocorrect = true; $('toggle-autocorrect').querySelector('.toggle').classList.add('on'); }
-  } catch(e) {}
-}
-
-function savePrefs() {
-  try {
-    localStorage.setItem(`${LS_KEY}_prefs`, JSON.stringify({
-      shuffled: state.shuffled, timerOn: state.timerOn, autocorrect: state.autocorrect
-    }));
-  } catch(e) {}
-}
-
-/* ────────── HELPERS ────────── */
-function countAnswered(answers) {
-  return Object.values(answers).filter(v => v !== null && v !== undefined).length;
-}
-
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-/* ── SVG Icons ── */
-function iconCheck() {
-  return `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 10 8 14 16 6"/></svg>`;
-}
-function iconX() {
-  return `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="5" x2="15" y2="15"/><line x1="15" y1="5" x2="5" y2="15"/></svg>`;
-}
-function iconChevron() {
-  return `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 4 10 8 6 12"/></svg>`;
-}
-
-/* ────────── EVENT BINDINGS (Quiz Screen) ────────── */
-document.addEventListener('DOMContentLoaded', () => {
-  // Check button
-  $('check-btn').addEventListener('click', checkAnswer);
-
-  // Prev/Next
+/* ────────── BUTTON BINDINGS ────────── */
+function bindButtons(){
   $('prev-btn').addEventListener('click', goPrev);
-  $('next-btn').addEventListener('click', () => {
-    const q = state.questions[state.currentIdx];
-    if (!state.checked[q.id] && !state.autocorrect) {
-      // remind to check
-      if (state.answers[q.id]) {
-        toast('Pulsa "Comprobar" para verificar tu respuesta');
-      }
-      goNext();
-    } else {
-      goNext();
-    }
-  });
+  $('next-btn').addEventListener('click', goNext);
+  $('check-btn').addEventListener('click', checkAnswer);
+  $('mark-btn').addEventListener('click', toggleMark);
 
-  // Mark button
-  $('bookmark-btn').addEventListener('click', toggleMark);
-
-  // Summary button
-  $('summary-btn').addEventListener('click', confirmFinish);
-
-  // Restart button (quiz screen)
-  $('restart-quiz-btn').addEventListener('click', () => {
-    showModal('Reiniciar test', '¿Seguro que deseas reiniciar este test? Perderás tu progreso actual.', [
-      { label: 'Reiniciar', cls: 'btn-danger', action: () => initNewTest(state.currentTest) },
-      { label: 'Cancelar', cls: 'btn-ghost', action: null }
-    ]);
-  });
-
-  // Back to menu (quiz screen)
   $('menu-btn-quiz').addEventListener('click', () => {
-    showModal('Volver al menú', 'Tu progreso se guardará. ¿Deseas salir?', [
-      { label: 'Salir', cls: 'btn-primary', action: () => { stopTimer(); showScreen('menu-screen'); saveToStorage(); }},
-      { label: 'Cancelar', cls: 'btn-ghost', action: null }
-    ]);
-  });
-
-  // Results buttons
-  $('results-restart-btn').addEventListener('click', () => {
-    showModal('Reiniciar test', '¿Deseas volver a hacer este test?', [
-      { label: 'Sí, reiniciar', cls: 'btn-primary', action: () => initNewTest(state.currentTest) },
-      { label: 'Cancelar', cls: 'btn-ghost', action: null }
-    ]);
-  });
-  $('results-menu-btn').addEventListener('click', () => {
+    if (state.timer.interval) clearInterval(state.timer.interval);
     showScreen('menu-screen');
   });
+  $('menu-btn-results').addEventListener('click', () => showScreen('menu-screen'));
 
-  // Review filters
-  $$('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => buildReview(btn.dataset.filter));
-  });
+  $('retry-btn').addEventListener('click', () => startTest(state.currentTest));
 
-  // Modal close on overlay click
-  $('modal-overlay').addEventListener('click', e => {
-    if (e.target === $('modal-overlay')) $('modal-overlay').classList.add('hidden');
+  // review filter chips
+  $$('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      setActiveChip(chip.dataset.filter);
+      populateReview(chip.dataset.filter);
+    });
   });
+}
 
-  // Save prefs on toggle
-  ['toggle-shuffle','toggle-timer','toggle-autocorrect'].forEach(id => {
-    $(id).addEventListener('click', () => setTimeout(savePrefs, 50));
-  });
-});
+/* ────────── INIT ────────── */
+function init(){
+  loadSettings();
+  bindToggles();
+  bindTopicFilter();
+  bindMenuCards();
+  bindButtons();
+  bindKeyboard();
+  showScreen('menu-screen');
+}
+init();
