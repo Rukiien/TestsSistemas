@@ -136,7 +136,7 @@ const TESTS_DATA = {
   }
 };
 
-// Validación automática (opcional, puedes borrarla si molesta)
+// Validación automática (mantenida)
 (function validateTests() {
   const required = ['id', 'tema', 'enunciado', 'opciones', 'correcta'];
   const valid = ['A','B','C','D'];
